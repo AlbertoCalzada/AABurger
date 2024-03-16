@@ -1,6 +1,6 @@
-const express = require ('express')
-const {config}= require ('dotenv') //para cargar las variables desde un archivo .env
-config()
+import express from 'express'
+/*const {config}= require ('dotenv') //para cargar las variables desde un archivo .env
+config()*/
 
 const app = express()
 
