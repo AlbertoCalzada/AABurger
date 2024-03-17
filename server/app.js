@@ -14,7 +14,7 @@ app.listen(port,()=>{
 })
 
 app.use(morgan('dev'))
-
+app.use(express.json())
 app.use("/api",authRoutes)
 
 //probando merge
