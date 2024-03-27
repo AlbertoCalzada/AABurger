@@ -80,11 +80,13 @@ export const logout = (req, res) => {
     return res.status(200).json({ message: 'Logout exitoso' })
 }
 
-export const profile =  async (req, res) => {
+export const profile = async (req, res) => {
 
     const userFound = await User.findById(req.user.id) //Buscamos al usuario en concreto por su id
 
-    if (!userFound) return res.status(400).json({ message: "Usuario no encontrado" })
+    if (!userFound) {
+        return res.status(400).json({ message: "Usuario no encontrado" })
+    }
 
     return res.json({
         id: userFound._id,
@@ -92,5 +94,5 @@ export const profile =  async (req, res) => {
         email: userFound.email
     })
 
-   
+
 }
