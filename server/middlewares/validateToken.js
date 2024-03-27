@@ -1,9 +1,26 @@
 // se va a ejecutar antes de que llegue a la ruta
+import jwt from 'jsonwebtoken'
+import { TOKEN_SECRET } from '../config.js'
+export const authRequired = (req, res, next) => {
 
-export const authRequired = (req, res, next) => {   
+    const { token } = req.cookies;
 
-    const cookies= req.cookies;
-    console.log(cookies)
+    if (!token) {
+        return res.status(401).json({ message: "No hay token, autorizacion denegada" })
+    }
 
-    next()
+    jwt.verify(token, TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.status(401).json({ message: "Token incorrecto" })
+        }
+
+        req.user=user
+        
+        console.log(user)
+
+        next()
+    })
+
+
+
 }

@@ -2,6 +2,7 @@ import express from 'express'
 import morgan from 'morgan'
 import {connectDB} from './db.js'
 import authRoutes from './routes/auth.routes.js'
+import cookieParser from 'cookie-parser' //permite visualizar cookies como un objeto json
 /*const {config}= require ('dotenv') //para cargar las variables desde un archivo .env
 config()*/
 
@@ -15,6 +16,7 @@ app.listen(port,()=>{
 
 app.use(morgan('dev'))
 app.use(express.json())
+app.use(cookieParser())
 app.use("/api",authRoutes)
 
 //probando merge
