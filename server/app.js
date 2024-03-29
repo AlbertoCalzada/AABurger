@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser' //permite visualizar cookies como un ob
 /*const {config}= require ('dotenv') //para cargar las variables desde un archivo .env
 config()*/
 
+import taskRoutes from './routes/tasks.routes.js'
+
 const app = express()
 
 const port = process.env.PORT || 8000
@@ -18,5 +20,6 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api",authRoutes)
+app.use("/api",taskRoutes)
 
 //probando merge

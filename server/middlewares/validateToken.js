@@ -1,4 +1,4 @@
-// se va a ejecutar antes de que llegue a la ruta
+// se va a ejecutar antes de que llegue a la ruta   app.js-middleware-rutas-controllers. 
 import jwt from 'jsonwebtoken'
 import { TOKEN_SECRET } from '../config.js'
 

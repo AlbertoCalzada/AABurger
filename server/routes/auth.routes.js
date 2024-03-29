@@ -7,7 +7,7 @@ router.post('/register', register)
 router.post('/login', login)
 router.post('/logout', logout)
 
-router.get('/profile', authRequired, profile ) //Para el perfil del usuario, antes se tendra que logear para que tenga efecto
+router.get('/profile', authRequired, profile ) //Para el perfil del usuario, antes se tendra que logear para que tenga efecto, protegemos la ruta
 
 
 export default router
