@@ -1,6 +1,7 @@
 // se va a ejecutar antes de que llegue a la ruta
 import jwt from 'jsonwebtoken'
 import { TOKEN_SECRET } from '../config.js'
+
 export const authRequired = (req, res, next) => {
 
     const { token } = req.cookies;
@@ -11,9 +12,10 @@ export const authRequired = (req, res, next) => {
 
     jwt.verify(token, TOKEN_SECRET, (err, user) => {
         if (err) {
-            return res.status(401).json({ message: "Token incorrecto" })
+            return res.status(403).json({ message: "Token incorrecto" })
         }
 
+       
         req.user=user
 
 
