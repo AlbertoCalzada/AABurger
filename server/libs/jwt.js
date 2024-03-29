@@ -5,9 +5,8 @@ import jwt from 'jsonwebtoken'
 export function createAccessToken(payload) {
 
     return new Promise((resolve, reject) => {
-        jwt.sign({
+        jwt.sign(
             payload,
-        },
             TOKEN_SECRET,
             {
                 expiresIn: "1d"
