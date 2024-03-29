@@ -34,7 +34,7 @@ export const deleteTask = async (req, res) => {
 }
 export const updateTask = async (req, res) => {
 
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body) //el dato de la url que me esten pasando y los nuevos datos
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true }) //el dato de la url que me esten pasando y los nuevos datos
     if (!task) {
         return res.status(404).json({ message: 'Tarea no encontrada' })
     }
