@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-
+import {registerRequest} from '../api/auth.js'
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
         username: '',
@@ -16,7 +16,7 @@ export default function RegisterForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Validar que todos los campos estén completos
         const { username, email, password } = formData;
@@ -24,18 +24,24 @@ export default function RegisterForm() {
             alert('Por favor completa todos los campos');
             return;
         }
-        // Aquí puedes agregar la lógica para enviar los datos del formulario al servidor
-        console.log(formData);
-        // Resetear el formulario después de enviar los datos
-        setFormData({
-            username: '',
-            email: '',
-            password: '',
-        });
+        try {
+            // Enviar los datos del formulario al servidor
+            await registerRequest(formData);
+            // Si la solicitud es exitosa, limpiar el formulario
+            setFormData({
+                username: '',
+                email: '',
+                password: '',
+            });
+            alert('Registro exitoso');
+        } catch (error) {
+            console.error('Error al registrar:', error);
+            alert('Hubo un error al registrar, por favor intenta nuevamente',error);
+        }
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+        <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-semibold mb-4">Registro</h2>
                 <form onSubmit={handleSubmit}>
