@@ -15,6 +15,11 @@ const taskSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true    //tarea con el usuario al que le pertenece
+    }
 }, {
     timestamps: true
 })
