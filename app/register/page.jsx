@@ -35,8 +35,8 @@ export default function RegisterForm() {
             });
             alert('Registro exitoso');
         } catch (error) {
-            console.error('Error al registrar:', error);
-            alert('Hubo un error al registrar, por favor intenta nuevamente',error);
+            console.log('Error al registrar:', error);
+            alert('Hubo un error al registrar, por favor intenta nuevamente');
         }
     };
 
