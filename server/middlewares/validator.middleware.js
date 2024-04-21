@@ -1,8 +1,7 @@
 //middleware para validar
 
 export const validateSchema = (schema) => (req, res, next) => {
-    try {
-        
+    try {  
         schema.parse(req.body)
         next()
     } catch (error) {

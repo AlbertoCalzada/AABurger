@@ -54,7 +54,6 @@ export const login = async (req, res) => {
 
     const { username, password } = req.body
 
-
     try {
 
         const userFound = await User.findOne({ username })
