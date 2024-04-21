@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { registerRequest } from '../api/auth.js'
+import { registerRequest } from '../api/auth/auth.js'
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
         username: '',

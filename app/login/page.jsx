@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { loginRequest } from '../api/auth.js'
+import { loginRequest } from '../api/auth/auth.js'
 export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
