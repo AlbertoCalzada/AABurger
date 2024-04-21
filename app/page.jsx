@@ -1,5 +1,5 @@
 import ButtonLink from '../components/buttonLink';
-
+import Testimonial from '../components/testimonial'
 export default function HomePage() {
     return (
         <div>
@@ -12,6 +12,10 @@ export default function HomePage() {
                 Inicio de Sesión
             </ButtonLink>
 
+            <Testimonial/>
+        
+
+        
         </div>
 
 
