@@ -1,4 +1,5 @@
 import Navbar from '../components/navbar'
+import Carousel from '../components/carousel'
 import "../styles/globals.css"
 import Footer from '../components/footer'
 import  Providers  from '../components/providers'
@@ -12,11 +13,19 @@ export default function RootLayout({ children }) {
         <title>A & A Burger</title>
       </head>
       <body>
+<<<<<<< HEAD
         <Providers>
           <Navbar />
           {children}
           <Footer/>
         </Providers>
+=======
+
+        <Navbar />
+
+        {children}
+
+>>>>>>> mainPage/carrusel
       </body>
     </html>
   )
