@@ -13,19 +13,11 @@ export default function RootLayout({ children }) {
         <title>A & A Burger</title>
       </head>
       <body>
-<<<<<<< HEAD
         <Providers>
           <Navbar />
           {children}
           <Footer/>
         </Providers>
-=======
-
-        <Navbar />
-
-        {children}
-
->>>>>>> mainPage/carrusel
       </body>
     </html>
   )
