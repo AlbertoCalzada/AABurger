@@ -8,16 +8,16 @@ export const register = async (req, res) => {
     const { email, username, password } = req.body
 
     const passwordHash = await bcrypt.hash(password, 10)
-
+    
     try {
         const newUser = new User({
             username,
             email,
             password: passwordHash
         })
-
+        
         const userSaved = await newUser.save()
-
+        
         const token = await createAccessToken({ id: userSaved._id })
 
         res.cookie('token', token)  //establece la cookie token, metodo ya hecho
@@ -30,7 +30,22 @@ export const register = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        if (error.code === 11000) {
+            // Si el error es debido a un correo electrónico duplicado
+            if (error.keyPattern && error.keyPattern.email) {
+                res.status(400).json({ message: 'Ya existe un usuario registrado con este correo electrónico.' });
+            } 
+            // Si el error es debido a un nombre de usuario duplicado
+            else if (error.keyPattern && error.keyPattern.username) {
+                res.status(400).json({ message: 'Ya existe un usuario registrado con este nombre de usuario.' });
+            } else {
+                console.log("Error interno del servidor al registrar usuario:", error);
+            }
+        } else {
+            // Para otros errores, devolvemos un mensaje genérico
+            console.log("Error al registrar:", error);
+            console.log("Error interno del servidor al registrar usuario:", error);
+        }
     }
 
 
@@ -38,7 +53,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
 
     const { username, password } = req.body
-
 
     try {
 

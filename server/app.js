@@ -5,7 +5,7 @@ import authRoutes from './routes/auth.routes.js'
 import cookieParser from 'cookie-parser' //permite visualizar cookies como un objeto json
 /*const {config}= require ('dotenv') //para cargar las variables desde un archivo .env
 config()*/
-
+import cors from 'cors'
 import taskRoutes from './routes/tasks.routes.js'
 
 const app = express()
@@ -16,9 +16,13 @@ app.listen(port,()=>{
     console.log(`Servidor escuchando en el puerto: ${port}`)
 })
 
+app.use(cors({
+    origin: 'http://localhost:3000'
+}))
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
+
 app.use("/api",authRoutes)
 app.use("/api",taskRoutes)
 
