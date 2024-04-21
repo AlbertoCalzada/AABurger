@@ -11,9 +11,11 @@ export default function RootLayout({ children }) {
         <title>A & A Burger</title>
       </head>
       <body>
+
         <Navbar />
-       
+
         {children}
+
       </body>
     </html>
   )
