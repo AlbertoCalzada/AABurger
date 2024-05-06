@@ -98,7 +98,7 @@ function ReservationForm() {
                         <button
                             type="button"
                             onClick={handleReservation}
-                            className="bg-gray-800 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline w-full transition duration-300 ease-in-out hover:bg-gray-700"
+                            className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline w-full transition duration-300 ease-in-out hover:from-yellow-600 hover:to-yellow-700"
                         >
                             Reservar
                         </button>
