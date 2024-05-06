@@ -41,7 +41,21 @@ function ReservationForm() {
         return spanishPhoneNumberRegex.test(phone)
     }
 
-
+    const clearForm = () => {
+        setName('')
+        setPhone('')
+        setPeopleCount(1)
+        setDate('')
+        setTime('')
+        setSelectedTurn('lunch')
+        setNameError('')
+        setPhoneError('')
+        setDateError('')
+        setGeneralError('')
+        setPeopleCountError('')
+        setTimeError('')
+        
+    };
 
     const handleReservation = async () => {
         // Reiniciar mensajes de error
@@ -95,13 +109,14 @@ function ReservationForm() {
             const response = await handleReservationAPI(formData);
             console.log(response.data); // Debería mostrar los datos correctamente ahora
             if (response && response.data && response.data.success) {
-                setSuccessMessage('Reserva realizada con éxito.');
+                setSuccessMessage('Reserva realizada con éxito.')
+                clearForm()
             } else {
-                setGeneralError('No se pudo completar la reserva.');
+                setGeneralError('No se pudo completar la reserva.')
             }
         } catch (error) {
             console.error('Error al hacer la reserva:', error);
-            setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.');
+            setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.')
         }
         
     }
