@@ -19,4 +19,4 @@ const reservaSchema = new mongoose.Schema({
     }
   });
 
-  export default mongoose.model('Task', reservaSchema)
+  export default mongoose.model('Reserve', reservaSchema)

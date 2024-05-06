@@ -2,7 +2,7 @@ import Reserves from '../models/reserve.model.js'
 
 export const createReserva = async (req, res) => {
     try {
-      const reserva = new Reserva(req.body)
+      const reserva = new Reserves(req.body)
       await reserva.save()
       res.status(201).json({ success: true, data: reserva })
     } catch (error) {
