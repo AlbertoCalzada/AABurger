@@ -1,13 +1,24 @@
 'use client'
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import {handleReservationAPI} from '../app/api/reservation/reservation.js'
+import React, { useState } from 'react'
+import Image from 'next/image'
+import { handleReservationAPI } from '../app/api/reservation/reservation.js'
+
 function ReservationForm() {
-    const [peopleCount, setPeopleCount] = useState(1);
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
-    const [selectedTurn, setSelectedTurn] = useState('lunch');
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [peopleCount, setPeopleCount] = useState(1)
+    const [date, setDate] = useState('')
+    const [time, setTime] = useState('')
+    const [selectedTurn, setSelectedTurn] = useState('lunch')
+
+    // Estados para mensajes de error
+    const [nameError, setNameError] = useState('')
+    const [phoneError, setPhoneError] = useState('')
+    const [dateError, setDateError] = useState('')
+    const [generalError, setGeneralError] = useState('')
+    const [peopleError, setPeopleCountError] = useState('')
+    const [timeError, setTimeError] = useState('')
 
     const availableTimes = {
         lunch: [
@@ -22,18 +33,65 @@ function ReservationForm() {
             '21:45', '22:00', '22:15', '22:30',
             '22:45', '23:00'
         ]
-    };
+    }
+
+    const isValidPhone = (phone) => {
+        const spanishPhoneNumberRegex = /^\d{9}$/
+        return spanishPhoneNumberRegex.test(phone)
+    }
+
+
 
     const handleReservation = () => {
+        // Reiniciar mensajes de error
+        setNameError('')
+        setPhoneError('')
+        setDateError('')
+        setGeneralError('')
+        setPeopleCountError('')
+        setTimeError('')
+
+        // Verificar que los campos obligatorios no estén vacíos
+        if (!name || !isValidPhone(phone) || !peopleCount || !date || !time || !selectedTurn) {
+            if (!name) {
+                setNameError('Por favor ingresa tu nombre.')
+            }
+            if (!isValidPhone(phone)) {
+                setPhoneError('Por favor ingresa un número de teléfono válido.')
+            }
+            if (!peopleCount) {
+                setPeopleCountError('Por favor ingresa la cantidad de personas.');
+            }
+            if (!date) {
+                setDateError('Por favor selecciona una fecha.');
+            }
+            if (!time) {
+                setTimeError('Por favor selecciona una hora.');
+            }
+            return;
+        }
+
+
+        // Validar que la fecha no sea anterior a hoy
+        const selectedDate = new Date(date)
+        const today = new Date()
+        if (selectedDate < today) {
+            setDateError('La fecha no puede ser anterior a hoy.')
+            return;
+        }
+
         const formData = {
+            name,
+            phone,
             peopleCount,
             date,
             time,
             selectedTurn
-        };
+        }
 
-        handleReservationAPI(formData);
-    };
+        handleReservationAPI(formData)
+       // setGeneralError('Por favor, revisa que todos los campos estén correctos antes de ser enviados.')
+    }
 
     return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,6 +114,32 @@ function ReservationForm() {
                     </div>
                     <form>
                         <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                                Nombre:
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            />
+                            {nameError && <p className="text-red-500">{nameError}</p>}
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+                                Teléfono:
+                            </label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            />
+                            {phoneError && <p className="text-red-500">{phoneError}</p>}
+                        </div>
+                        <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="peopleCount">
                                 Cantidad de Personas:
                             </label>
@@ -71,6 +155,7 @@ function ReservationForm() {
                                     </option>
                                 ))}
                             </select>
+                            {peopleError && <p className="text-red-500">{peopleError}</p>}
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
@@ -83,6 +168,7 @@ function ReservationForm() {
                                 onChange={(e) => setDate(e.target.value)}
                                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
+                            {dateError && <p className="text-red-500">{dateError}</p>}
                         </div>
                         <div className="mb-6">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
@@ -100,6 +186,7 @@ function ReservationForm() {
                                     </option>
                                 ))}
                             </select>
+                            {timeError && <p className="text-red-500">{timeError}</p>}
                         </div>
                         <button
                             type="button"
