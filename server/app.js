@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser' //permite visualizar cookies como un ob
 config()*/
 import cors from 'cors'
 import taskRoutes from './routes/tasks.routes.js'
+import reservaRoutes from './routes/reserve.routes.js'
 
 const app = express()
 
@@ -25,5 +26,5 @@ app.use(cookieParser())
 
 app.use("/api",authRoutes)
 app.use("/api",taskRoutes)
-
+app.use('/api', reservaRoutes)
 //probando merge
