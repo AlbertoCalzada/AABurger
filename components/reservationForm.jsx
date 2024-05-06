@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-
+import {handleReservationAPI} from '../app/api/reservation/reservation.js'
 function ReservationForm() {
     const [peopleCount, setPeopleCount] = useState(1);
     const [date, setDate] = useState('');
@@ -25,8 +25,14 @@ function ReservationForm() {
     };
 
     const handleReservation = () => {
-        // Enviar los datos de la reserva al servidor
-        console.log('Reserva:', { peopleCount, date, time });
+        const formData = {
+            peopleCount,
+            date,
+            time,
+            selectedTurn
+        };
+
+        handleReservationAPI(formData);
     };
 
     return (

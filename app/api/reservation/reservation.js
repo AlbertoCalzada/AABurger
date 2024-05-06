@@ -2,14 +2,7 @@ import axios from 'axios';
 
 const API = "http://localhost:8000/api";
 
-export const handleReservation = () => {
-    const formData = {
-        peopleCount,
-        date,
-        time,
-        selectedTurn
-    };
-
+export const handleReservationAPI = (formData) => {
     axios.post(`${API}/reservation`, formData)
         .then(response => {
             console.log('Datos enviados correctamente:', response.data);
