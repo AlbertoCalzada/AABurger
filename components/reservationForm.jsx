@@ -19,6 +19,7 @@ function ReservationForm() {
     const [generalError, setGeneralError] = useState('')
     const [peopleError, setPeopleCountError] = useState('')
     const [timeError, setTimeError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
 
     const availableTimes = {
         lunch: [
@@ -42,7 +43,7 @@ function ReservationForm() {
 
 
 
-    const handleReservation = () => {
+    const handleReservation = async () => {
         // Reiniciar mensajes de error
         setNameError('')
         setPhoneError('')
@@ -50,6 +51,7 @@ function ReservationForm() {
         setGeneralError('')
         setPeopleCountError('')
         setTimeError('')
+        setSuccessMessage('')
 
         // Verificar que los campos obligatorios no estén vacíos
         if (!name || !isValidPhone(phone) || !peopleCount || !date || !time || !selectedTurn) {
@@ -60,13 +62,13 @@ function ReservationForm() {
                 setPhoneError('Por favor ingresa un número de teléfono válido.')
             }
             if (!peopleCount) {
-                setPeopleCountError('Por favor ingresa la cantidad de personas.');
+                setPeopleCountError('Por favor ingresa la cantidad de personas.')
             }
             if (!date) {
-                setDateError('Por favor selecciona una fecha.');
+                setDateError('Por favor selecciona una fecha.')
             }
             if (!time) {
-                setTimeError('Por favor selecciona una hora.');
+                setTimeError('Por favor selecciona una hora.')
             }
             return;
         }
@@ -89,8 +91,19 @@ function ReservationForm() {
             selectedTurn
         }
 
-        handleReservationAPI(formData)
-       // setGeneralError('Por favor, revisa que todos los campos estén correctos antes de ser enviados.')
+        try {
+            const response = await handleReservationAPI(formData);
+            console.log(response.data); // Debería mostrar los datos correctamente ahora
+            if (response && response.data && response.data.success) {
+                setSuccessMessage('Reserva realizada con éxito.');
+            } else {
+                setGeneralError('No se pudo completar la reserva.');
+            }
+        } catch (error) {
+            console.error('Error al hacer la reserva:', error);
+            setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.');
+        }
+        
     }
 
     return (
@@ -113,6 +126,10 @@ function ReservationForm() {
                         </button>
                     </div>
                     <form>
+                    <div className="w-full lg:w-1/2 flex justify-center">
+                        {successMessage && <p className="text-green-500">{successMessage}</p>}
+                        {generalError && <p className="text-red-500">{generalError}</p>}
+                    </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                                 Nombre:
@@ -197,6 +214,7 @@ function ReservationForm() {
                         </button>
 
                     </form>
+                    
                 </div>
                 <div className="w-full lg:w-1/2">
                     <Image src="/images/fotoRestaurante.jpg" alt="Foto del restaurante" width={500} height={300} className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity" />
