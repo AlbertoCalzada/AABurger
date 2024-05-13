@@ -54,7 +54,7 @@ function ReservationForm() {
         setGeneralError('')
         setPeopleCountError('')
         setTimeError('')
-        
+
     };
 
     const handleReservation = async () => {
@@ -118,7 +118,7 @@ function ReservationForm() {
             console.error('Error al hacer la reserva:', error);
             setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.')
         }
-        
+
     }
 
     return (
@@ -141,10 +141,24 @@ function ReservationForm() {
                         </button>
                     </div>
                     <form>
-                    <div className="w-full lg:w-1/2 flex justify-center">
-                        {successMessage && <p className="text-green-500">{successMessage}</p>}
-                        {generalError && <p className="text-red-500">{generalError}</p>}
-                    </div>
+                        <div className="w-full lg:w-1/2 flex justify-center">
+                            {successMessage && (
+                                <div className="relative mt-4">
+                                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                                        <strong className="font-bold">Reserva completada!</strong>
+                                        <span className="block sm:inline"> Tu reserva ha sido realizada con éxito.</span>
+                                    </div>
+                                    <button
+                                        className="absolute top-0 right-0 mt-1 mr-1"
+                                        onClick={() => setSuccessMessage('')}
+                                    >
+                                        <svg className="fill-current h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 5.652a.5.5 0 0 0-.707 0L10 9.293 6.359 5.652a.5.5 0 1 0-.707.707L9.293 10l-3.64 3.641a.5.5 0 0 0 .707.707L10 10.707l3.641 3.64a.5.5 0 0 0 .707-.707L10.707 10l3.641-3.641a.5.5 0 0 0 0-.707z" /></svg>
+                                    </button>
+                                </div>
+                            )}
+
+                            {generalError && <p className="text-red-500">{generalError}</p>}
+                        </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                                 Nombre:
@@ -229,7 +243,7 @@ function ReservationForm() {
                         </button>
 
                     </form>
-                    
+
                 </div>
                 <div className="w-full lg:w-1/2">
                     <Image src="/images/fotoRestaurante.jpg" alt="Foto del restaurante" width={500} height={300} className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity" />

@@ -8,7 +8,7 @@ export default function RegisterForm() {
         password: '',
     });
     const [errorMessage, setErrorMessage] = useState('')
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const [registrationSuccess, setRegistrationSuccess] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,12 +22,12 @@ export default function RegisterForm() {
         e.preventDefault();
         const { username, email, password } = formData;
         if (!username || !email || !password) {
-            alert('Por favor completa todos los campos');
+            alert('Por favor completa todos los campos')
             return;
         }
         try {
             // Enviar los datos del formulario al servidor
-            const peticion = await registerRequest(formData);
+            const peticion = await registerRequest(formData)
             console.log("esta es la peticion " + peticion)
             // Si la solicitud es exitosa, limpiar el formulario
             setFormData({
@@ -35,18 +35,18 @@ export default function RegisterForm() {
                 email: '',
                 password: '',
             });
-            setRegistrationSuccess(true);
-            setErrorMessage('');
+            setRegistrationSuccess(true)
+            setErrorMessage('')
         } catch (error) {
-            console.log('Error al registrar:', error);
+            console.log('Error al registrar:', error)
             if (error.response && error.response.data) {
                 // Si el error tiene un mensaje definido en el servidor, mostrarlo
-                const errorMessage = error.response.data.message || error.response.data.error.join('\n');
+                const errorMessage = error.response.data.message || error.response.data.error.join('\n')
                 // Mostrar el mensaje de error en rojo
-                setErrorMessage(errorMessage);
+                setErrorMessage(errorMessage)
             } else {
                 // Para otros errores, mostrar un mensaje genérico
-                setErrorMessage('Error inesperado al registrar, por favor intenta nuevamente');
+                setErrorMessage('Error inesperado al registrar, por favor intenta nuevamente')
             }
         }
 
@@ -107,15 +107,22 @@ export default function RegisterForm() {
                     >
                         Registrarse
                     </button>
+                    
                     {registrationSuccess && (
-                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4" role="alert">
-                            <strong className="font-bold">Registro completado!</strong>
-                            <span className="block sm:inline"> Tu cuenta ha sido creada con éxito.</span>
-                            <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <div className="relative mt-4">
+                            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                                <strong className="font-bold">Registro completado!</strong>
+                                <span className="block sm:inline"> Tu cuenta ha sido creada con éxito.</span>
+                            </div>
+                            <button
+                                className="absolute top-0 right-0 mt-1 mr-1"
+                                onClick={() => setRegistrationSuccess(false)}
+                            >
                                 <svg className="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 5.652a.5.5 0 0 0-.707 0L10 9.293 6.359 5.652a.5.5 0 1 0-.707.707L9.293 10l-3.64 3.641a.5.5 0 0 0 .707.707L10 10.707l3.641 3.64a.5.5 0 0 0 .707-.707L10.707 10l3.641-3.641a.5.5 0 0 0 0-.707z" /></svg>
-                            </span>
+                            </button>
                         </div>
                     )}
+
 
                 </form>
             </div>
