@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { signOut, useSession } from 'next-auth/react'; //para el login con google
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Navbar() {
   const handleReserveClick = (e) => {
@@ -16,13 +16,8 @@ export default function Navbar() {
   };
 
   const { data: session } = useSession(); // Obtén la sesión actual
-  let isLoggedIn = !!session; // Por defecto, asumimos que la sesión de NextAuth está disponible
-  
-  if (typeof document !== 'undefined') {
-    // Verificar si estamos en el navegador
-    isLoggedIn = isLoggedIn || !!document.cookie.includes('token'); // Verificar también la cookie de token
-  }
 
+ 
   return (
     <header className="text-gray-600 body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
@@ -35,7 +30,7 @@ export default function Navbar() {
           <Link href="/aboutus" className="mr-5 hover:text-gray-900">Nuestra historia</Link>
           <Link href="/contact" className="mr-5 hover:text-gray-900">Contacto</Link>
         </nav>
-        <Link href='/order'>
+        <Link href="/order">
           <button className="inline-flex text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base mt-4 md:mt-0">Pedir</button>
         </Link>
         <Link href="#" onClick={handleReserveClick}>
@@ -45,13 +40,11 @@ export default function Navbar() {
             </svg>
           </button>
         </Link>
-        {(isLoggedIn || session) && (
+        {session && (
           <div className="flex items-center ml-2">
-            {session && (
-              <span className="mr-2">Hola, {session.user.name}</span>
-            )}
+            <span className="mr-2">Hola, {session.user.name}</span>
             <button
-              onClick={() => signOut()} // Llama a la función signOut para cerrar sesión
+              onClick={() => signOut()}
               className="inline-flex items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-red-600 rounded-md text-white text-base mt-4 md:mt-0"
             >
               Cerrar Sesión

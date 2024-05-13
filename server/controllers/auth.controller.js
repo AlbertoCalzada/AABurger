@@ -2,6 +2,7 @@ import User from '../models/user.model.js'
 import bcrypt from 'bcryptjs'
 import { createAccessToken } from '../libs/jwt.js'
 import { get } from 'mongoose'
+import { getSession } from 'next-auth/react'
 
 export const register = async (req, res) => {
 
@@ -18,9 +19,9 @@ export const register = async (req, res) => {
         
         const userSaved = await newUser.save()
         
-        const token = await createAccessToken({ id: userSaved._id })
+        //const token = await createAccessToken({ id: userSaved._id })
 
-        res.cookie('token', token)  //establece la cookie token, metodo ya hecho
+        //res.cookie('token', token)  //establece la cookie token, metodo ya hecho
 
         //le mandamos al front estos datos
         res.json({
@@ -69,7 +70,7 @@ export const login = async (req, res) => {
         }
 
 
-        const token = await createAccessToken({ id: userFound._id })
+        /*const token = await createAccessToken({ id: userFound._id })
 
         res.cookie('token', token)  //establece la cookie llamada token, metodo ya hecho
 
@@ -78,7 +79,17 @@ export const login = async (req, res) => {
             id: userFound._id,
             username: userFound.username,
             email: userFound.email
-        })
+        })*/
+
+        const session = { 
+            user: {
+                id: userFound._id,
+                username: userFound.username,
+                email: userFound.email
+            }
+        }
+
+        res.json(session)
 
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -89,12 +100,12 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
 
-    res.cookie('token', "", { expires: new Date(0) }) //Borramos token
+    //res.cookie('token', "", { expires: new Date(0) }) //Borramos token
 
     return res.status(200).json({ message: 'Logout exitoso' })
 }
 
-export const profile = async (req, res) => {
+/*export const profile = async (req, res) => {
 
     const userFound = await User.findById(req.user.id) //Buscamos al usuario en concreto por su id
        
@@ -108,5 +119,16 @@ export const profile = async (req, res) => {
         email: userFound.email
     })
 
-
 }
+*/
+
+export const profile = async (req, res) => {
+    const session = await getSession({ req })
+
+    if (!session) {
+        return res.status(401).json({ message: 'Usuario no autenticado' })
+    }
+
+    res.json(session.user)
+}
+

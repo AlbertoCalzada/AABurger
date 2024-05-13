@@ -9,7 +9,9 @@ router.post('/register', validateSchema(registerSchema), register)
 router.post('/login', validateSchema(loginSchema), login)
 router.post('/logout', logout)
 
-router.get('/profile', authRequired, profile) //Para el perfil del usuario, antes se tendra que logear para que tenga efecto, protegemos la ruta
+//router.get('/profile', authRequired , profile)
+
+router.get('/profile',  profile) //Para el perfil del usuario, antes se tendra que logear para que tenga efecto, protegemos la ruta
 
 
 export default router
