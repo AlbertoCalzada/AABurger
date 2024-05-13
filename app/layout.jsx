@@ -2,7 +2,7 @@ import Navbar from '../components/navbar'
 import Carousel from '../components/carousel'
 import "../styles/globals.css"
 import Footer from '../components/footer'
-import  Providers  from '../components/providers'
+import  {Providers}  from '../components/providers'
 
 export default function RootLayout({ children }) {
   return (

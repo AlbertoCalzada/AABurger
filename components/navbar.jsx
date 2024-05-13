@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import {signOut, useSession } from 'next-auth/react'; //para el login con google
 
 export default function Navbar() {
   const handleReserveClick = (e) => {
@@ -13,6 +14,8 @@ export default function Navbar() {
       window.location.href = '/#reserve';
     }
   };
+
+  const { data: session } = useSession() // Obtén la sesión actual
 
   return (
     <header className="text-gray-600 body-font">
@@ -36,6 +39,17 @@ export default function Navbar() {
             </svg>
           </button>
         </Link>
+        {session ? (
+          <div className="flex items-center ml-2">
+            <span className="mr-2">Hola, {session.user.name}</span>
+            <button
+              onClick={() => signOut()} // Llama a la función signOut para cerrar sesión
+              className="inline-flex items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-red-600 rounded-md text-white text-base mt-4 md:mt-0"
+            >
+              Cerrar Sesión
+            </button>
+          </div>
+        ) : null}
       </div>
     </header>
   );

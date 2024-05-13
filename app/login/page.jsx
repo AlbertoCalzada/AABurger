@@ -1,10 +1,13 @@
 'use client'
 import { useState } from 'react';
 import { loginRequest } from '../api/auth/auth.js'
-import { signIn , useSession} from 'next-auth/react'; //para el login con google
-import { use } from 'express/lib/router/index.js';
+import { signIn, signOut, useSession } from 'next-auth/react'; //para el login con google
+
+//import { use } from 'express/lib/router/index.js';
 
 export default function LoginForm() {
+
+   
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -57,8 +60,10 @@ export default function LoginForm() {
         signIn('google');
     };
 
-    const { data: session } = useSession()
-    console.log(session)
+    const { data: session } = useSession() // Obtén la sesión actual
+
+    
+
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -114,6 +119,16 @@ export default function LoginForm() {
                     </button>
 
                 </form>
+
+                {/* Muestra el botón de cerrar sesión si hay una sesión activa */}
+                {session && (
+                    <button
+                        onClick={() => signOut()} // Llama a la función signOut para cerrar sesión
+                        className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
+                    >
+                        Cerrar Sesión
+                    </button>
+                )}
             </div>
         </div>
     );
