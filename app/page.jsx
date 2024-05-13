@@ -5,6 +5,7 @@ import ReservationForm from '../components/reservationForm'
 export default function HomePage() {
     return (
         <div>
+            
             <Carousel />
             <br />
             <ButtonLink href="/register" style="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-5">

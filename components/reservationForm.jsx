@@ -1,25 +1,29 @@
 'use client'
 
-import React, { useState } from 'react'
-import Image from 'next/image'
-import { handleReservationAPI } from '../app/api/reservation/reservation.js'
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { handleReservationAPI } from '../app/api/reservation/reservation.js';
+import { handleReservationEmail } from '../app/api/send/route.ts';
+
 
 function ReservationForm() {
-    const [name, setName] = useState('')
-    const [phone, setPhone] = useState('')
-    const [peopleCount, setPeopleCount] = useState(1)
-    const [date, setDate] = useState('')
-    const [time, setTime] = useState('')
-    const [selectedTurn, setSelectedTurn] = useState('lunch')
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [peopleCount, setPeopleCount] = useState(1);
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [selectedTurn, setSelectedTurn] = useState('lunch');
 
     // Estados para mensajes de error
-    const [nameError, setNameError] = useState('')
-    const [phoneError, setPhoneError] = useState('')
-    const [dateError, setDateError] = useState('')
-    const [generalError, setGeneralError] = useState('')
-    const [peopleError, setPeopleCountError] = useState('')
-    const [timeError, setTimeError] = useState('')
-    const [successMessage, setSuccessMessage] = useState('')
+    const [nameError, setNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [dateError, setDateError] = useState('');
+    const [generalError, setGeneralError] = useState('');
+    const [peopleError, setPeopleCountError] = useState('');
+    const [timeError, setTimeError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const availableTimes = {
         lunch: [
@@ -34,92 +38,106 @@ function ReservationForm() {
             '21:45', '22:00', '22:15', '22:30',
             '22:45', '23:00'
         ]
-    }
+    };
+
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
     const isValidPhone = (phone) => {
-        const spanishPhoneNumberRegex = /^\d{9}$/
-        return spanishPhoneNumberRegex.test(phone)
-    }
+        const spanishPhoneNumberRegex = /^\d{9}$/;
+        return spanishPhoneNumberRegex.test(phone);
+    };
 
     const clearForm = () => {
-        setName('')
-        setPhone('')
-        setPeopleCount(1)
-        setDate('')
-        setTime('')
-        setSelectedTurn('lunch')
-        setNameError('')
-        setPhoneError('')
-        setDateError('')
-        setGeneralError('')
-        setPeopleCountError('')
-        setTimeError('')
-        
+        setName('');
+        setEmail('');
+        setPhone('');
+        setPeopleCount(1);
+        setDate('');
+        setTime('');
+        setSelectedTurn('lunch');
+        setNameError('');
+        setEmailError('');
+        setPhoneError('');
+        setDateError('');
+        setGeneralError('');
+        setPeopleCountError('');
+        setTimeError('');
     };
 
     const handleReservation = async () => {
         // Reiniciar mensajes de error
-        setNameError('')
-        setPhoneError('')
-        setDateError('')
-        setGeneralError('')
-        setPeopleCountError('')
-        setTimeError('')
-        setSuccessMessage('')
+        setNameError('');
+        setEmailError('');
+        setPhoneError('');
+        setDateError('');
+        setGeneralError('');
+        setPeopleCountError('');
+        setTimeError('');
+        setSuccessMessage('');
 
         // Verificar que los campos obligatorios no estén vacíos
-        if (!name || !isValidPhone(phone) || !peopleCount || !date || !time || !selectedTurn) {
+        if (!name || !isValidEmail(email) || !isValidPhone(phone) || !peopleCount || !date || !time || !selectedTurn) {
             if (!name) {
-                setNameError('Por favor ingresa tu nombre.')
+                setNameError('Por favor ingresa tu nombre.');
+            }
+            if (!isValidEmail(email)) {
+                setEmailError('Por favor ingresa un correo electrónico válido.');
             }
             if (!isValidPhone(phone)) {
-                setPhoneError('Por favor ingresa un número de teléfono válido.')
+                setPhoneError('Por favor ingresa un número de teléfono válido.');
             }
             if (!peopleCount) {
-                setPeopleCountError('Por favor ingresa la cantidad de personas.')
+                setPeopleCountError('Por favor ingresa la cantidad de personas.');
             }
             if (!date) {
-                setDateError('Por favor selecciona una fecha.')
+                setDateError('Por favor selecciona una fecha.');
             }
             if (!time) {
-                setTimeError('Por favor selecciona una hora.')
+                setTimeError('Por favor selecciona una hora.');
             }
             return;
         }
 
-
         // Validar que la fecha no sea anterior a hoy
-        const selectedDate = new Date(date)
-        const today = new Date()
+        const selectedDate = new Date(date);
+        const today = new Date();
         if (selectedDate < today) {
-            setDateError('La fecha no puede ser anterior a hoy.')
+            setDateError('La fecha no puede ser anterior a hoy.');
             return;
         }
 
         const formData = {
             name,
+            email,
             phone,
             peopleCount,
             date,
             time,
             selectedTurn
-        }
+        };
 
         try {
             const response = await handleReservationAPI(formData);
             console.log(response.data); // Debería mostrar los datos correctamente ahora
             if (response && response.data && response.data.success) {
-                setSuccessMessage('Reserva realizada con éxito.')
-                clearForm()
+               
+
+                const emailResponse = await handleReservationEmail(formData);
+                console.log("email" + emailResponse); // Manejar la respuesta del envío de correo electrónico
+                console.log("hola")
+                setSuccessMessage('Reserva realizada con éxito.');
+                clearForm();
             } else {
-                setGeneralError('No se pudo completar la reserva.')
+                setGeneralError('No se pudo completar la reserva.');
             }
         } catch (error) {
             console.error('Error al hacer la reserva:', error);
-            setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.')
+            setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.');
         }
-        
-    }
+    };
 
     return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -141,10 +159,10 @@ function ReservationForm() {
                         </button>
                     </div>
                     <form>
-                    <div className="w-full lg:w-1/2 flex justify-center">
-                        {successMessage && <p className="text-green-500">{successMessage}</p>}
-                        {generalError && <p className="text-red-500">{generalError}</p>}
-                    </div>
+                        <div className="w-full lg:w-1/2 flex justify-center">
+                            {successMessage && <p className="text-green-500">{successMessage}</p>}
+                            {generalError && <p className="text-red-500">{generalError}</p>}
+                        </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                                 Nombre:
@@ -157,6 +175,19 @@ function ReservationForm() {
                                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             {nameError && <p className="text-red-500">{nameError}</p>}
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                                Correo Electrónico:
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            />
+                            {emailError && <p className="text-red-500">{emailError}</p>}
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
@@ -227,9 +258,7 @@ function ReservationForm() {
                         >
                             Reservar
                         </button>
-
                     </form>
-                    
                 </div>
                 <div className="w-full lg:w-1/2">
                     <Image src="/images/fotoRestaurante.jpg" alt="Foto del restaurante" width={500} height={300} className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity" />
