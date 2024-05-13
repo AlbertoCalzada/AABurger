@@ -1,18 +1,26 @@
 'use client'
-import { useState } from 'react';
-import { loginRequest } from '../api/auth/auth.js'
-import { signIn, signOut, useSession } from 'next-auth/react'; //para el login con google
+import { useState, useEffect } from 'react';
+import { loginRequest } from '../api/auth/auth.js';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
-//import { use } from 'express/lib/router/index.js';
 
 export default function LoginForm() {
-
-   
     const [formData, setFormData] = useState({
         username: '',
         password: '',
     });
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
+    const { data: session } = useSession(); // Inicio de sesión con Google
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Inicio de sesión normal
+
+    useEffect(() => {
+        // Verificar si existe la cookie 'token' al cargar la página
+        const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (token) {
+            // Si la cookie 'token' existe, establecer isLoggedIn a true
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -30,40 +38,30 @@ export default function LoginForm() {
             return;
         }
         try {
-            // Enviar los datos del formulario al servidor
+            // Realizar la solicitud de inicio de sesión
             const peticion = await loginRequest(formData);
-            console.log("esta es la peticion " + peticion)
-            // Si la solicitud es exitosa, limpiar el formulario
             setFormData({
                 username: '',
                 password: '',
             });
-
             setErrorMessage('');
+            setIsLoggedIn(true); // Establecer como logueado cuando la solicitud sea exitosa
         } catch (error) {
-            console.log('Error al registrar:', error);
+            console.log('Error al iniciar sesión:', error);
             if (error.response && error.response.data) {
-                // Si el error tiene un mensaje definido en el servidor, mostrarlo
                 const errorMessage = error.response.data.message || error.response.data.error.join('\n');
-                // Mostrar el mensaje de error en rojo
                 setErrorMessage(errorMessage);
             } else {
-                // Para otros errores, mostrar un mensaje genérico
-                setErrorMessage('Error inesperado al registrar, por favor intenta nuevamente');
+                setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
             }
         }
-
-
     };
 
     const handleGoogleSignIn = () => {
         signIn('google');
     };
 
-    const { data: session } = useSession() // Obtén la sesión actual
-
-    
-
+  
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -102,7 +100,7 @@ export default function LoginForm() {
                         type="submit"
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
                     >
-                        Iniciar Sesion
+                        Iniciar Sesión
                     </button>
 
                     <button
@@ -120,15 +118,14 @@ export default function LoginForm() {
 
                 </form>
 
-                {/* Muestra el botón de cerrar sesión si hay una sesión activa */}
-                {session && (
+                {isLoggedIn || session ? (
                     <button
-                        onClick={() => signOut()} // Llama a la función signOut para cerrar sesión
+                        onClick={() => signOut()}
                         className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
                     >
                         Cerrar Sesión
                     </button>
-                )}
+                ) : null}
             </div>
         </div>
     );
