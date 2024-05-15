@@ -9,6 +9,10 @@ const reservaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true
+    },
     peopleCount: {
         type: Number,
         required: true
