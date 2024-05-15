@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { handleReservationAPI } from '../app/api/reservation/reservation.js';
 import EmailTemplate from './emailReserves.jsx';
-
+import CountrySelector from './countrySelector.jsx';
+import { PhoneNumberUtil } from 'google-libphonenumber';;
 
 function ReservationForm() {
     const [name, setName] = useState('');
@@ -14,6 +15,12 @@ function ReservationForm() {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [selectedTurn, setSelectedTurn] = useState('lunch');
+
+    const [selectedCountry, setSelectedCountry] = useState("");
+
+    const handleCountrySelect = (code) => {
+        setSelectedCountry(code);
+    };
 
     // Estados para mensajes de error
     const [nameError, setNameError] = useState('');
@@ -50,6 +57,29 @@ function ReservationForm() {
         return spanishPhoneNumberRegex.test(phone);
     };
 
+    const validatePhoneNumber = () => {
+        const phoneNumberUtil = PhoneNumberUtil.getInstance();
+        const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(phone, selectedCountry);
+        console.log("phoneNumber", phoneNumber)
+        console.log("phoneNumberUtil", phoneNumberUtil)
+        if (!phoneNumberUtil.isValidNumber(phoneNumber)) {
+            setPhoneError("Número de teléfono no válido para el país seleccionado.");
+            return false;
+        }
+
+        // Validar el formato del número según el país
+        const isValidFormat = phoneNumberUtil.isValidNumberForRegion(phoneNumber, selectedCountry);
+        console.log("isValidFormat", isValidFormat)
+
+        if (!isValidFormat) {
+            setPhoneError("Número de teléfono no sigue el formato válido para el país seleccionado.");
+            return false;
+        }
+
+        setPhoneError("");
+        return true;
+    };
+
     const clearForm = () => {
         setName('');
         setEmail('');
@@ -79,16 +109,15 @@ function ReservationForm() {
         setSuccessMessage('');
 
         // Verificar que los campos obligatorios no estén vacíos
-        if (!name || !isValidEmail(email) || !isValidPhone(phone) || !peopleCount || !date || !time || !selectedTurn) {
+        if (!name || !isValidEmail(email)  || !peopleCount || !date || !time || !selectedTurn) {
+            
             if (!name) {
                 setNameError('Por favor ingresa tu nombre.');
             }
             if (!isValidEmail(email)) {
                 setEmailError('Por favor ingresa un correo electrónico válido.');
             }
-            if (!isValidPhone(phone)) {
-                setPhoneError('Por favor ingresa un número de teléfono válido.');
-            }
+            
             if (!peopleCount) {
                 setPeopleCountError('Por favor ingresa la cantidad de personas.');
             }
@@ -109,6 +138,11 @@ function ReservationForm() {
             return;
         }
 
+        if (!validatePhoneNumber()) {
+            // Si la validación del número de teléfono falla, la función ya habrá establecido el mensaje de error apropiado.
+            return;
+        }
+
         const formData = {
             name,
             email,
@@ -119,13 +153,13 @@ function ReservationForm() {
             selectedTurn
         };
 
-        
+
 
         try {
             const response = await handleReservationAPI(formData);
-            console.log(response.data); 
+            console.log(response.data);
             if (response && response.data && response.data.success) {
-               
+
                 const emailData = {
                     name,
                     email,
@@ -134,8 +168,8 @@ function ReservationForm() {
                     peopleCount
                 };
 
-                const emailResponse = await handleEmailReservation(emailData);
-                console.log(emailResponse); 
+                //const emailResponse = await handleEmailReservation(emailData);
+                //console.log(emailResponse);
 
                 setSuccessMessage('Reserva realizada con éxito.');
                 clearForm();
@@ -161,7 +195,7 @@ function ReservationForm() {
             return await response.json();
         } catch (error) {
             console.error('Error al enviar el correo electrónico de reserva:', error);
-         
+
             return { error: 'Error al enviar el correo electrónico de reserva.' };
         }
     };
@@ -219,13 +253,18 @@ function ReservationForm() {
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
                                 Teléfono:
                             </label>
-                            <input
-                                type="tel"
-                                id="phone"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            />
+                            <div className='flex items-center'>
+
+                                <CountrySelector onSelect={handleCountrySelect} />
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="ml-2 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    style={{ flex: 1 }} // Ajusta el tamaño del input para que ocupe el espacio restante
+                                />
+                            </div>
                             {phoneError && <p className="text-red-500">{phoneError}</p>}
                         </div>
                         <div className="mb-4">
