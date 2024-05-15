@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { handleReservationAPI } from '../app/api/reservation/reservation.js';
-import { handleReservationEmail } from '../app/api/send/route.ts';
+import EmailTemplate from './emailReserves.jsx';
 
 
 function ReservationForm() {
@@ -105,7 +105,7 @@ function ReservationForm() {
         const selectedDate = new Date(date);
         const today = new Date();
         if (selectedDate < today) {
-            setDateError('La fecha no puede ser anterior a hoy.');
+            setDateError('Elige una fecha posterior a hoy.');
             return;
         }
 
@@ -119,15 +119,24 @@ function ReservationForm() {
             selectedTurn
         };
 
+        
+
         try {
             const response = await handleReservationAPI(formData);
-            console.log(response.data); // Debería mostrar los datos correctamente ahora
+            console.log(response.data); 
             if (response && response.data && response.data.success) {
                
+                const emailData = {
+                    name,
+                    email,
+                    time,
+                    date,
+                    peopleCount
+                };
 
-                const emailResponse = await handleReservationEmail(formData);
-                console.log("email" + emailResponse); // Manejar la respuesta del envío de correo electrónico
-                console.log("hola")
+                const emailResponse = await handleEmailReservation(emailData);
+                console.log(emailResponse); 
+
                 setSuccessMessage('Reserva realizada con éxito.');
                 clearForm();
             } else {
@@ -139,6 +148,23 @@ function ReservationForm() {
         }
     };
 
+    const handleEmailReservation = async (emailData) => {
+        try {
+            const response = await fetch('/api/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData),
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error al enviar el correo electrónico de reserva:', error);
+         
+            return { error: 'Error al enviar el correo electrónico de reserva.' };
+        }
+    };
     return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap justify-center lg:justify-start">
