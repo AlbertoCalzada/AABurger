@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import Image from 'next/image';
 import { handleReservationAPI } from '../app/api/reservation/reservation.js';
 import EmailTemplate from './emailReserves.jsx';
@@ -16,10 +16,31 @@ function ReservationForm() {
     const [time, setTime] = useState('');
     const [selectedTurn, setSelectedTurn] = useState('lunch');
 
-    const [selectedCountry, setSelectedCountry] = useState("");
+    const [selectedCountry, setSelectedCountry] = useState('ES');
+    
+    const [phonePrefix, setPhonePrefix] = useState('+34'); // Default prefix 
+    const [phoneSuffix, setPhoneSuffix] = useState('');
+
+    const phoneNumberUtil = PhoneNumberUtil.getInstance();
+
+    useEffect(() => {
+        const countryCode = phoneNumberUtil.getCountryCodeForRegion(selectedCountry.toUpperCase());
+        setPhonePrefix(`+${countryCode} `);
+    }, [selectedCountry]);
 
     const handleCountrySelect = (code) => {
         setSelectedCountry(code);
+    };
+
+    const handlePhoneChange = (e) => {
+        const inputPhone = e.target.value;
+        if (inputPhone.startsWith(phonePrefix)) {
+            setPhoneSuffix(inputPhone.substring(phonePrefix.length));
+            setPhone(inputPhone);
+        } else {
+            setPhoneSuffix(phoneSuffix);
+            setPhone(phone);
+        }
     };
 
     // Estados para mensajes de error
@@ -58,21 +79,17 @@ function ReservationForm() {
     };
 
     const validatePhoneNumber = () => {
-        const phoneNumberUtil = PhoneNumberUtil.getInstance();
-        const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(phone, selectedCountry);
-        console.log("phoneNumber", phoneNumber)
-        console.log("phoneNumberUtil", phoneNumberUtil)
-        if (!phoneNumberUtil.isValidNumber(phoneNumber)) {
-            setPhoneError("Número de teléfono no válido para el país seleccionado.");
-            return false;
-        }
+        const regionCode = selectedCountry.toUpperCase();
+        const fullPhoneNumber = phonePrefix.trim() + phoneSuffix.trim();
 
-        // Validar el formato del número según el país
-        const isValidFormat = phoneNumberUtil.isValidNumberForRegion(phoneNumber, selectedCountry);
-        console.log("isValidFormat", isValidFormat)
-
-        if (!isValidFormat) {
-            setPhoneError("Número de teléfono no sigue el formato válido para el país seleccionado.");
+        try {
+            const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(fullPhoneNumber, regionCode);
+            if (!phoneNumberUtil.isValidNumber(parsedPhoneNumber)) {
+                setPhoneError("Número de teléfono no válido para el país seleccionado.");
+                return false;
+            }
+        } catch (error) {
+            setPhoneError("Número de teléfono no válido.");
             return false;
         }
 
@@ -80,10 +97,11 @@ function ReservationForm() {
         return true;
     };
 
+    
     const clearForm = () => {
         setName('');
         setEmail('');
-        setPhone('');
+        setPhone(`+${phoneNumberUtil.getCountryCodeForRegion(selectedCountry.toUpperCase())}`); // Reset phone with current country code
         setPeopleCount(1);
         setDate('');
         setTime('');
@@ -95,6 +113,7 @@ function ReservationForm() {
         setGeneralError('');
         setPeopleCountError('');
         setTimeError('');
+        setPhoneSuffix('');
     };
 
     const handleReservation = async () => {
@@ -109,10 +128,13 @@ function ReservationForm() {
         setSuccessMessage('');
 
         // Verificar que los campos obligatorios no estén vacíos
-        if (!name || !isValidEmail(email)  || !peopleCount || !date || !time || !selectedTurn) {
+        if (!name || !isValidEmail(email)  || !phone || !peopleCount || !date || !time || !selectedTurn) {
             
             if (!name) {
                 setNameError('Por favor ingresa tu nombre.');
+            }
+            if (!phone) {
+                setPhoneError('Por favor ingresa tu tlf.');
             }
             if (!isValidEmail(email)) {
                 setEmailError('Por favor ingresa un correo electrónico válido.');
@@ -153,7 +175,7 @@ function ReservationForm() {
             selectedTurn
         };
 
-
+        console.log('Form Data:', formData);
 
         try {
             const response = await handleReservationAPI(formData);
@@ -168,7 +190,7 @@ function ReservationForm() {
                     peopleCount
                 };
 
-                //const emailResponse = await handleEmailReservation(emailData);
+                const emailResponse = await handleEmailReservation(emailData);
                 //console.log(emailResponse);
 
                 setSuccessMessage('Reserva realizada con éxito.');
@@ -254,15 +276,13 @@ function ReservationForm() {
                                 Teléfono:
                             </label>
                             <div className='flex items-center'>
-
                                 <CountrySelector onSelect={handleCountrySelect} />
                                 <input
                                     type="tel"
                                     id="phone"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    value={phonePrefix + phoneSuffix} 
+                                    onChange={handlePhoneChange}
                                     className="ml-2 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    style={{ flex: 1 }} // Ajusta el tamaño del input para que ocupe el espacio restante
                                 />
                             </div>
                             {phoneError && <p className="text-red-500">{phoneError}</p>}

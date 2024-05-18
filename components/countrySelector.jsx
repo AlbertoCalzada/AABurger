@@ -4,7 +4,7 @@ import ReactFlagsSelect from "react-flags-select";
 import { getCountryCallingCode } from 'libphonenumber-js';
 
 function CountrySelector({ onSelect }) {
-    const [selected, setSelected] = useState("");
+    const [selected, setSelected] = useState("ES");
     const [selectedPrefix, setSelectedPrefix] = useState("");
 
     const handleSelect = (code) => {
