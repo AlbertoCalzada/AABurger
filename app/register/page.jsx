@@ -1,6 +1,8 @@
 'use client'
 import { useState } from 'react';
 import { registerRequest } from '../api/auth/auth.js'
+import Link from 'next/link';
+
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
         username: '',
@@ -123,8 +125,9 @@ export default function RegisterForm() {
                         </div>
                     )}
 
-
                 </form>
+                <br/>
+                <p>¿Ya tienes una cuenta? <Link href='/login' style={{ color: 'blue', textDecoration: 'underline' }}>Inicia sesión</Link></p>
             </div>
         </div>
     );

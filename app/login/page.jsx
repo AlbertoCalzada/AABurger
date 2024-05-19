@@ -1,7 +1,8 @@
 'use client'
 import { useState } from 'react';
-import { signIn, useSession,signOut } from 'next-auth/react';
+import { signIn, useSession, signOut } from 'next-auth/react';
 import { loginRequest } from '../api/auth/auth.js';
+import Link from 'next/link';
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
@@ -29,9 +30,9 @@ export default function LoginForm() {
         }
         try {
             await loginRequest(formData);
-            setIsLoggedIn(true); 
-            setFormData({ username: '', password: '' }); 
-            setErrorMessage(''); 
+            setIsLoggedIn(true);
+            setFormData({ username: '', password: '' });
+            setErrorMessage('');
         } catch (error) {
             console.log('Error al iniciar sesión:', error);
             if (error.response && error.response.data) {
@@ -97,7 +98,7 @@ export default function LoginForm() {
                         Iniciar Sesión con Google
                     </button>
                 )}
-                 {isLoggedIn || session ? (
+                {isLoggedIn || session ? (
                     <button
                         onClick={() => signOut()}
                         className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
@@ -105,6 +106,11 @@ export default function LoginForm() {
                         Cerrar Sesión
                     </button>
                 ) : null}
+                <br />
+
+                <p>
+                    ¿No tienes cuenta? <Link href="/register" style={{ color: 'blue', textDecoration: 'underline' }}>Regístrate</Link>
+                </p>
             </div>
         </div>
     );
