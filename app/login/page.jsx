@@ -4,6 +4,7 @@ import { signIn, useSession, signOut } from 'next-auth/react';
 import { loginRequest } from '../api/auth/auth.js';
 import Link from 'next/link';
 
+
 export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
@@ -11,8 +12,7 @@ export default function LoginForm() {
     });
     const { data: session } = useSession();
     const [errorMessage, setErrorMessage] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
@@ -24,21 +24,44 @@ export default function LoginForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { username, password } = formData;
-        if (!username || !password) {
-            setErrorMessage('Por favor completa todos los campos');
+        // Validar campos de usuario y contraseña
+        if (!username) {
+            setErrorMessage('Usuario requerido');
             return;
         }
+        if (!password) {
+            setErrorMessage('Contraseña requerida');
+            return;
+        }
+        if (password.length < 6) {
+            setErrorMessage('La contraseña debe tener al menos 6 caracteres');
+            return;
+        
+        }
         try {
-            await loginRequest(formData);
-            setIsLoggedIn(true);
+            //await loginRequest(formData);
+
+          
+
+            await signIn('credentials', {
+                username,
+                password,
+                redirect: false // No redireccionar automáticamente después del inicio de sesión
+            });
+
+           
             setFormData({ username: '', password: '' });
             setErrorMessage('');
         } catch (error) {
-            console.log('Error al iniciar sesión:', error);
+            console.log('Error al registrar:', error);
             if (error.response && error.response.data) {
-                setErrorMessage(error.response.data.message);
+                // Si el error tiene un mensaje definido en el servidor, mostrarlo
+                const errorMessage = error.response.data.message || error.response.data.error.join('\n');
+                // Mostrar el mensaje de error en rojo
+                setErrorMessage(errorMessage);
             } else {
-                setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
+                // Para otros errores, mostrar un mensaje genérico
+                setErrorMessage('Error inesperado al registrar, por favor intenta nuevamente');
             }
         }
     };
@@ -98,7 +121,7 @@ export default function LoginForm() {
                         Iniciar Sesión con Google
                     </button>
                 )}
-                {isLoggedIn || session ? (
+                {session ? (
                     <button
                         onClick={() => signOut()}
                         className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
