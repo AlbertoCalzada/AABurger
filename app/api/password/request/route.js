@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '../../../../server/db';
 import User from '../../../../server/models/user.model';
+import ResetToken from '../../../../server/models/resetToken.model.js';
 import { Resend } from 'resend';
 import crypto from 'crypto';
 
@@ -23,10 +24,13 @@ export async function POST(request) {
         }
 
         const token = crypto.randomBytes(20).toString('hex');
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
 
-        await user.save();
+        const resetToken = new ResetToken({
+            userId: user._id,
+            token: token,
+            expiresAt: new Date(Date.now() + 3600000) // 1 hora desde ahora
+        });
+        await resetToken.save();
 
         const resetUrl = `${process.env.NEXTAUTH_URL}/resetPassword?token=${token}`;
 
