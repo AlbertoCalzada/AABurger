@@ -57,7 +57,22 @@ export default function RegisterForm() {
 
     };
 
-
+    if (session) {
+        return (
+            <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
+                <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                    <h2 className="text-2xl font-semibold mb-4">Bienvenido {session.user.name || session.user.email}</h2>
+                    <button
+                        onClick={() => signOut()}
+                        className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
+                    >
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        );
+    }
+    
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
