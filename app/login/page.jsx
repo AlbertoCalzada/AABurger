@@ -139,6 +139,9 @@ export default function LoginForm() {
                 </button>
                 <br />
                 <p>
+                     <Link href="/requestResetPassword" className="text-blue-500 underline">¿Olvidaste tu contraseña?</Link>
+                </p>
+                <p>
                     ¿No tienes cuenta? <Link href="/register" className="text-blue-500 underline">Regístrate</Link>
                 </p>
             </div>
