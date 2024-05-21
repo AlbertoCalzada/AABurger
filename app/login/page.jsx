@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { signIn, useSession, signOut } from 'next-auth/react';
-import { loginRequest } from '../api/auth/auth.js';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 
@@ -10,9 +10,10 @@ export default function LoginForm() {
         username: '',
         password: '',
     });
-    const { data: session } = useSession();
+    const { data: session} = useSession();
     const [errorMessage, setErrorMessage] = useState('');
-    
+    const router = useRouter();
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
@@ -41,30 +42,47 @@ export default function LoginForm() {
         try {
             //await loginRequest(formData);
 
-          
-
-            await signIn('credentials', {
+        
+            const result = await signIn('credentials', {
                 username,
                 password,
-                redirect: false // No redireccionar automáticamente después del inicio de sesión
+                redirect: false,
             });
 
-           
-            setFormData({ username: '', password: '' });
-            setErrorMessage('');
-        } catch (error) {
-            console.log('Error al registrar:', error);
-            if (error.response && error.response.data) {
-                // Si el error tiene un mensaje definido en el servidor, mostrarlo
-                const errorMessage = error.response.data.message || error.response.data.error.join('\n');
-                // Mostrar el mensaje de error en rojo
-                setErrorMessage(errorMessage);
+            if (result.error) {
+                try {
+                    const error = JSON.parse(result.error);
+                    setErrorMessage(error.message);
+                } catch (e) {
+                    setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
+                }
             } else {
-                // Para otros errores, mostrar un mensaje genérico
-                setErrorMessage('Error inesperado al registrar, por favor intenta nuevamente');
+                setFormData({ username: '', password: '' });
+                setErrorMessage('');
+                router.push('/'); // Redirigir a la página de inicio
             }
+        } catch (error) {
+            setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
         }
     };
+
+  
+
+    if (session) {
+        return (
+            <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
+                <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                    <h2 className="text-2xl font-semibold mb-4">Bienvenido {session.user.name || session.user.email}</h2>
+                    <button
+                        onClick={() => signOut()}
+                        className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
+                    >
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
@@ -108,31 +126,20 @@ export default function LoginForm() {
                     </button>
                 </form>
 
-                {!session && (
-                    <button
-                        onClick={() => signIn('google')}
-                        className="w-full bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors mt-4 flex items-center justify-center"
-                    >
-                        <img
-                            src="/img/google-icon-logo.svg"
-                            alt="Google Logo"
-                            className="w-5 h-5 mr-2"
-                        />
-                        Iniciar Sesión con Google
-                    </button>
-                )}
-                {session ? (
-                    <button
-                        onClick={() => signOut()}
-                        className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
-                    >
-                        Cerrar Sesión
-                    </button>
-                ) : null}
+                <button
+                    onClick={() => signIn('google')}
+                    className="w-full bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors mt-4 flex items-center justify-center"
+                >
+                    <img
+                        src="/img/google-icon-logo.svg"
+                        alt="Google Logo"
+                        className="w-5 h-5 mr-2"
+                    />
+                    Iniciar Sesión con Google
+                </button>
                 <br />
-
                 <p>
-                    ¿No tienes cuenta? <Link href="/register" style={{ color: 'blue', textDecoration: 'underline' }}>Regístrate</Link>
+                    ¿No tienes cuenta? <Link href="/register" className="text-blue-500 underline">Regístrate</Link>
                 </p>
             </div>
         </div>

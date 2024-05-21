@@ -4,8 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import User from '../../../../server/models/user.model';
 import bcrypt from 'bcryptjs';
 import { connectDB } from '../../../../server/db';
-
-
+import { v4 as uuidv4 } from 'uuid'; // Para generar un UUID único
 
 const handler = NextAuth({
     providers: [
@@ -22,7 +21,7 @@ const handler = NextAuth({
                 password: { label: "Password", type: "password", placeholder: "Contraseña" }
             },
             async authorize(credentials, req) {
-                try {
+                
                     // Conectar a la base de datos
                     await connectDB();
                     
@@ -30,14 +29,14 @@ const handler = NextAuth({
                     const user = await User.findOne({ username: credentials.username });
                     
                     if (!user) {
-                        throw new Error('Usuario no encontrado');
+                        throw new Error(JSON.stringify({ statusCode: 404, message: 'Usuario no encontrado' }));
                     }
             
                     // Verificar la contraseña
                     const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
             
                     if (!isPasswordValid) {
-                        throw new Error('Contraseña incorrecta');
+                        throw new Error(JSON.stringify({ statusCode: 401, message: 'Contraseña incorrecta' }));
                     }
             
                     // Si las credenciales son válidas, devolver los datos del usuario
@@ -46,11 +45,7 @@ const handler = NextAuth({
                         name: user.username,
                         email: user.email
                     };
-                } catch (error) {
-                    // Manejar errores de autenticación
-                    console.error('Error en la autenticación:', error.message);
-                    return null;
-                }
+                
             }
         })
     ],
@@ -60,12 +55,16 @@ const handler = NextAuth({
                 // Verificar si el usuario ya existe en la base de datos
                 await connectDB();
 
-                const existingUser = await User.findOne({ email: user.email });
+                let existingUser = await User.findOne({ email: user.email });
+                
                 if (!existingUser) {
-                    
-                    await new User({
+                    const username = user.email.split('@')[0]; // Usar la parte antes de @ como nombre de usuario
+                    const password = uuidv4(); // Generar una contraseña aleatoria
+
+                    existingUser = await new User({
                         email: user.email,
-                       
+                        username: username,
+                        password: await bcrypt.hash(password, 10), // Encriptar la contraseña generada
                     }).save();
                 }
                 return true; 
