@@ -26,7 +26,7 @@ export default function AboutPage() {
               ¡Te invitamos a seguir las próximas aventuras culinarias en nuestras redes sociales!
             </p>
           </div>
-        </div>
+        </div> 
         <div className="lg:w-1/2 lg:h-auto h-64 relative">
           <Image alt="albertos" src="/img/aboutus_profile.jpg" width={500} height={500}  />
         </div>
