@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Navbar() {
   const handleReserveClick = (e) => {
@@ -9,16 +10,19 @@ export default function Navbar() {
     const reserveElement = document.getElementById('reserve');
     if (reserveElement) {
       reserveElement.scrollIntoView({ behavior: 'smooth' });
-    }else {
+    } else {
       window.location.href = '/#reserve';
     }
   };
 
+  const { data: session } = useSession(); // Obtén la sesión actual
+
+ 
   return (
     <header className="text-gray-600 body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
         <Link href='/' className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-          <Image src="/img/icon.svg" alt="Logo Web" width={2000/10} height={2000/10}/>
+          <Image src="/img/icon.svg" alt="Logo Web" width={2000 / 10} height={2000 / 10} />
         </Link>
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
           <Link href="/menu" className="mr-5 hover:text-gray-900">Carta</Link>
@@ -26,7 +30,7 @@ export default function Navbar() {
           <Link href="/aboutus" className="mr-5 hover:text-gray-900">Nuestra historia</Link>
           <Link href="/contact" className="mr-5 hover:text-gray-900">Contacto</Link>
         </nav>
-        <Link href='/order'>
+        <Link href="/order">
           <button className="inline-flex text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base mt-4 md:mt-0">Pedir</button>
         </Link>
         <Link href="#" onClick={handleReserveClick}>
@@ -36,6 +40,17 @@ export default function Navbar() {
             </svg>
           </button>
         </Link>
+        {session && (
+          <div className="flex items-center ml-2">
+            <span className="mr-2">Hola, {session.user.name}</span>
+            <button
+              onClick={() => signOut()}
+              className="inline-flex items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-red-600 rounded-md text-white text-base mt-4 md:mt-0"
+            >
+              Cerrar Sesión
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );

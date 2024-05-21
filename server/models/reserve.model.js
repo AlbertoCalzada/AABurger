@@ -7,7 +7,8 @@ const reservaSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     email: {
         type: String,

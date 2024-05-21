@@ -1,15 +1,18 @@
 'use client'
 import { useState } from 'react';
-import { loginRequest } from '../api/auth/auth.js'
-import { signIn , useSession} from 'next-auth/react'; //para el login con google
-import { use } from 'express/lib/router/index.js';
+import { signIn, useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
     });
-    const [errorMessage, setErrorMessage] = useState('')
+    const { data: session} = useSession();
+    const [errorMessage, setErrorMessage] = useState('');
+    const router = useRouter();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,43 +25,65 @@ export default function LoginForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { username, password } = formData;
-        if (!username || !password) {
-            alert('Por favor completa todos los campos');
+        // Validar campos de usuario y contraseña
+        if (!username) {
+            setErrorMessage('Usuario requerido');
             return;
         }
+        if (!password) {
+            setErrorMessage('Contraseña requerida');
+            return;
+        }
+        if (password.length < 6) {
+            setErrorMessage('La contraseña debe tener al menos 6 caracteres');
+            return;
+        
+        }
         try {
-            // Enviar los datos del formulario al servidor
-            const peticion = await loginRequest(formData);
-            console.log("esta es la peticion " + peticion)
-            // Si la solicitud es exitosa, limpiar el formulario
-            setFormData({
-                username: '',
-                password: '',
+            //await loginRequest(formData);
+
+        
+            const result = await signIn('credentials', {
+                username,
+                password,
+                redirect: false,
             });
 
-            setErrorMessage('');
-        } catch (error) {
-            console.log('Error al registrar:', error);
-            if (error.response && error.response.data) {
-                // Si el error tiene un mensaje definido en el servidor, mostrarlo
-                const errorMessage = error.response.data.message || error.response.data.error.join('\n');
-                // Mostrar el mensaje de error en rojo
-                setErrorMessage(errorMessage);
+            if (result.error) {
+                try {
+                    const error = JSON.parse(result.error);
+                    setErrorMessage(error.message);
+                } catch (e) {
+                    setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
+                }
             } else {
-                // Para otros errores, mostrar un mensaje genérico
-                setErrorMessage('Error inesperado al registrar, por favor intenta nuevamente');
+                setFormData({ username: '', password: '' });
+                setErrorMessage('');
+                router.push('/'); // Redirigir a la página de inicio
             }
+        } catch (error) {
+            setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
         }
-
-
     };
 
-    const handleGoogleSignIn = () => {
-        signIn('google');
-    };
+  
 
-    const { data: session } = useSession()
-    console.log(session)
+    if (session) {
+        return (
+            <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
+                <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                    <h2 className="text-2xl font-semibold mb-4">Bienvenido {session.user.name || session.user.email}</h2>
+                    <button
+                        onClick={() => signOut()}
+                        className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors mt-4"
+                    >
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -97,23 +122,25 @@ export default function LoginForm() {
                         type="submit"
                         className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
                     >
-                        Iniciar Sesion
+                        Iniciar Sesión
                     </button>
-
-                    <button
-                        type="button"
-                        onClick={handleGoogleSignIn}
-                        className="w-full bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors mt-4 flex items-center justify-center"
-                    >
-                        <img
-                            src="/img/google-icon-logo.svg"
-                            alt="Google Logo"
-                            className="w-5 h-5 mr-2"
-                        />
-                        Iniciar Sesión con Google
-                    </button>
-
                 </form>
+
+                <button
+                    onClick={() => signIn('google')}
+                    className="w-full bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors mt-4 flex items-center justify-center"
+                >
+                    <img
+                        src="/img/google-icon-logo.svg"
+                        alt="Google Logo"
+                        className="w-5 h-5 mr-2"
+                    />
+                    Iniciar Sesión con Google
+                </button>
+                <br />
+                <p>
+                    ¿No tienes cuenta? <Link href="/register" className="text-blue-500 underline">Regístrate</Link>
+                </p>
             </div>
         </div>
     );

@@ -9,6 +9,9 @@ import cors from 'cors'
 import taskRoutes from './routes/tasks.routes.js'
 import reservaRoutes from './routes/reserve.routes.js'
 
+import dotenv from 'dotenv'
+dotenv.config()
+
 const app = express()
 
 const port = process.env.PORT || 8000
@@ -27,4 +30,3 @@ app.use(cookieParser())
 app.use("/api",authRoutes)
 app.use("/api",taskRoutes)
 app.use('/api', reservaRoutes)
-//probando merge
