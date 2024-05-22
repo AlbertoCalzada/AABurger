@@ -9,14 +9,13 @@ const MenuSection = ({ title, description, items }) => (
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {items.map((item) => (
-        <div key={item.id} className="relative overflow-hidden rounded-lg group">
-          <div className="w-full h-80 relative">
+        <div key={item.id} className="relative overflow-hidden rounded-lg group" style={{ width: '400px', height: '300px' }}>
+          <div className="w-full h-full relative overflow-hidden">
             <Image
-              className="object-cover object-center transition-transform duration-300 transform group-hover:scale-110"
+              className="object-cover object-center w-full h-full transition-transform duration-300 transform group-hover:scale-110"
               src={`/img/menu/${item.image}`}
               alt={item.alt}
-              width={400}
-              height={300}
+              layout="fill"
             />
           </div>
           <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
