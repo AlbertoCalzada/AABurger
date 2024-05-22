@@ -2,7 +2,7 @@ import React from "react";
 
 export default function FindUs() {
   return (
-    <section className="text-gray-600 body-font relative">
+    <section className="text-gray-600 body-font relative" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>
       <div className="container px-5 py-24 mx-auto flex sm:flex-nowrap flex-wrap">
         <div className="lg:w-2/3 md:w-1/2 bg-gray-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
           <iframe
@@ -15,7 +15,7 @@ export default function FindUs() {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
-          <div className="bg-white relative flex flex-wrap py-6 rounded shadow-md">
+          <div className="bg-white bg-opacity-75 relative flex flex-wrap py-6 rounded shadow-md">
             <div className="lg:w-1/2 px-6">
               <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">
                 DIRECCIÓN
@@ -41,14 +41,14 @@ export default function FindUs() {
             </div>
           </div>
         </div>
-        <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-          <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
-            ¿Donde nos puedes encontrar?
+        <div className="lg:w-1/3 md:w-1/2 bg-white bg-gray-800 bg-opacity-40 rounded-lg p-8 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 p-8 rounded-lg">
+          <h2 className="text-gray-100 text-2xl mb-4 font-bold title-font">
+            ¿Dónde nos puedes encontrar?
           </h2>
           <div className="relative mb-4">
-            <div className="text-gray-600 body-font" style={{ textAlign: "justify" }}>
+            <div className="text-gray-100 text-lg leading-relaxed text-justify mb-8">
               <p className="mb-6">
-                ¡Bienvenidos a nuestro local de burgers en Madrid!
+                ¡Bienvenidos a nuestro local de hamburguesas en Madrid!
               </p>
               <p className="mb-6">
                 Ubicado estratégicamente en el corazón de la capital española, en la Glorieta de Bilbao, 4, nos encontramos en una zona central y vibrante de la ciudad. En este barrio lleno de vida, nuestro restaurante es un oasis para los amantes de las hamburguesas y la buena comida.
@@ -63,10 +63,10 @@ export default function FindUs() {
                 Además, contamos con un espacio exclusivo: La Guarida. Esta sala privada ofrece un ambiente íntimo y exclusivo para grupos de hasta 10 comensales. Perfecta para celebraciones especiales o reuniones privadas, La Guarida garantiza una experiencia gastronómica inolvidable en un entorno único.
               </p>
               <p className="mb-6">
-                En nuestro local de burgers, nos esforzamos por ofrecer no solo excelencia en comida, sino también un ambiente cálido y acogedor donde cada cliente se sienta bienvenido y atendido.
+                En nuestro local de hamburguesas, nos esforzamos por ofrecer no solo excelencia en comida, sino también un ambiente cálido y acogedor donde cada cliente se sienta bienvenido y atendido.
               </p>
               <p>
-                ¡Te invitamos a vivir una experiencia única en nuestro local de burgers en Madrid!
+                ¡Te invitamos a vivir una experiencia única en nuestro local de hamburguesas en Madrid!
               </p>
             </div>
           </div>
