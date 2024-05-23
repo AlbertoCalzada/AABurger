@@ -65,6 +65,7 @@ const handler = NextAuth({
                         email: user.email,
                         username: username,
                         password: await bcrypt.hash(password, 10), // Encriptar la contraseña generada
+                        role: "user"
                     }).save();
                 }
                 return true; 
