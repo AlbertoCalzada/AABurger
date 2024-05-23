@@ -58,7 +58,7 @@ export default function LoginForm() {
                 setFormData({ username: '', password: '' });
                 setErrorMessage('');
 
-                //aqui quiero obtener el usuario que se ha logeado y segun su rol redirigirlo a un sitio u otro
+                
             }
         } catch (error) {
             setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
@@ -68,6 +68,21 @@ export default function LoginForm() {
 
 
     if (session) {
+
+        //fix 
+         const userRole = session?.user?.role;
+         console.log(session?.user?.role)
+         console.log(session?.user?.name)
+         console.log(session?.user?.email)
+         console.log(session.user.id)
+          if (userRole === 'admin') {
+              router.push('/admin');
+          } else if (userRole === 'user') {
+              router.push('/dashboard');
+          } else {
+              router.push('/'); 
+          }
+
         return (
             <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
                 <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
