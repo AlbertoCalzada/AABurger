@@ -48,7 +48,7 @@ export default function LoginForm() {
                 password,
                 redirect: false,
             });
-          
+            console.log(result)
             if (result.error) {
 
                 const error = JSON.parse(result.error);
@@ -71,10 +71,8 @@ export default function LoginForm() {
 
         //fix 
          const userRole = session?.user?.role;
-         console.log(session?.user?.role)
-         console.log(session?.user?.name)
-         console.log(session?.user?.email)
-         console.log(session.user.id)
+         console.log(session); // Imprime el objeto de sesión completo
+
           if (userRole === 'admin') {
               router.push('/admin');
           } else if (userRole === 'user') {
