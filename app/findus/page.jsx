@@ -41,7 +41,7 @@ export default function FindUs() {
             </div>
           </div>
         </div>
-        <div className="lg:w-1/3 md:w-1/2 bg-white bg-gray-800 bg-opacity-40 rounded-lg p-8 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 p-8 rounded-lg">
+        <div className="lg:w-1/3 md:w-1/2 bg-gray-800 bg-opacity-40 rounded-lg p-8 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0 p-8 rounded-lg">
           <h2 className="text-gray-100 text-2xl mb-4 font-bold title-font">
             ¿Dónde nos puedes encontrar?
           </h2>
