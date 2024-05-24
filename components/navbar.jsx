@@ -30,6 +30,7 @@ export default function Navbar() {
             <Link href="/findus" className="mr-5 font-bold text-gray-700 hover:text-gray-900 transition-colors duration-200">¿Dónde estamos?</Link>
             <Link href="/aboutus" className="mr-5 font-bold text-gray-700 hover:text-gray-900 transition-colors duration-200">Nuestra historia</Link>
             <Link href="/contact" className="mr-5 font-bold text-gray-700 hover:text-gray-900 transition-colors duration-200">Contacto</Link>
+            <Link href="/faq" className="mr-5 font-bold text-gray-700 hover:text-gray-900 transition-colors duration-200">FAQ</Link>
           </nav>
           <Link href='/order'>
             <button className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-full text-lg mt-4 md:mt-0">Pedir</button>

@@ -85,6 +85,9 @@ export default function Contact() {
             <div className="p-2 w-full pt-8 mt-8 border-t border-gray-200 text-center">
               <a href="mailto:info@a&aburger.com" className="text-indigo-500">info@a&aburger.com</a>
               <p className="leading-normal my-5">
+                Horario de apertura:<br />Lunes a Domingo<br />13h-16h y 20h-24h
+              </p>
+              <p className="leading-normal my-5">
                 Gta. de Bilbao, 4, Chamberí<br />28004 Madrid
               </p>
             </div>

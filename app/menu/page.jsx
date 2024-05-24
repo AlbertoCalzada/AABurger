@@ -42,7 +42,7 @@ export default function Menu() {
       alt: 'alitas-bbq',
       name: 'Alitas BBQ',
       description: 'Cocinadas a baja temperatura durante 12 horas para que se desagan en tu boca.',
-      price: 8.9,
+      price: 8.90,
     },
     {
       id: 2,
@@ -50,7 +50,7 @@ export default function Menu() {
       alt: 'nachos',
       name: 'Nachetes',
       description: 'Totopos caseros, pico de gallo, guacamole, crema agria y nuestra jugoso pull-pork.',
-      price: 9.5,
+      price: 9.50,
     },
     {
       id: 3,
@@ -58,7 +58,7 @@ export default function Menu() {
       alt: 'aros-de-cebolla',
       name: 'Aros de Cebolla',
       description: 'La perfección hecha aro rebozado, crujientes y dorados.',
-      price: 7.9,
+      price: 7.90,
     },
     {
       id: 4,
@@ -66,7 +66,7 @@ export default function Menu() {
       alt: 'steak-tartar',
       name: 'Steak Tartar',
       description: 'Cuando estas tan orgullo de la carne de tu burger que eres capaz de servirlo en tartar de entrante',
-      price: 10.9,
+      price: 10.90,
     },
   ];
   
@@ -77,7 +77,7 @@ export default function Menu() {
       alt: 'cuarto-libra',
       name: 'Cuarto de mi vida',
       description: 'La versión mejorada de la mítica cheeseburger: Queso, pepinillo, cebolla cruda, ketchup y mostaza.',
-      price: 10.9,
+      price: 10.90,
     },
     {
       id: 6,
@@ -85,7 +85,7 @@ export default function Menu() {
       alt: 'Pullpork-Crispy',
       name: 'Pullpork Crispy',
       description: 'Crujiente sabor en cada bocado, para los amantes del cerdo: Cebolla crispy, queso, cebolla morada, pullpork, carne, lechuga y mayonesa.',
-      price: 11.9,
+      price: 11.90,
     },
     {
       id: 7,
@@ -93,7 +93,7 @@ export default function Menu() {
       alt: 'Costilla-Burger',
       name: 'Costi-Burger',
       description: 'Amantes de las costillas estais de suerte: Nuestra salsa BBQ, bacon y costilla deshuesada marinada.',
-      price: 13.9,
+      price: 13.90,
     },
     {
       id: 8,
@@ -101,7 +101,7 @@ export default function Menu() {
       alt: 'OnionRing-Burger',
       name: 'Onion Rings Burger',
       description: 'Solo te puedo decir: Jugosos aros de cebollas junto con nuestra salsa BBQ y salsa de mayo chipotle.',
-      price: 12.9,
+      price: 12.90,
     },
     {
       id: 9,
@@ -109,7 +109,7 @@ export default function Menu() {
       alt: 'Royal-Deluxe',
       name: 'Royal Deluxe',
       description: 'Perfecta a la par que sencilla: Tomate, queso, bacon, lechuga y salsa mayonesa',
-      price: 10.9,
+      price: 10.90,
     },
     {
       id: 10,
@@ -117,7 +117,7 @@ export default function Menu() {
       alt: 'La-del-mes',
       name: 'La del MES',
       description: 'Burger sorpresa cada mes, para descubrirla tendras que mirar en nuestras redes sociales.',
-      price: 11.5,
+      price: 11.50,
     },
   ];
   
@@ -128,7 +128,7 @@ export default function Menu() {
       alt: 'tarta-queso',
       name: 'Tarta de Queso',
       description: 'Tarta de queso con mermelada de fresa.',
-      price: 4.9,
+      price: 4.90,
     },
     {
       id: 12,
@@ -136,7 +136,7 @@ export default function Menu() {
       alt: 'tarta-pistacho',
       name: 'Tarta de Pistacho',
       description: 'Tarta de pistacho.',
-      price: 4.9,
+      price: 4.90,
     },
   ];
   return (
