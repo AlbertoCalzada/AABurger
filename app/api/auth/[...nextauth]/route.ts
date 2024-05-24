@@ -40,23 +40,30 @@ const handler = NextAuth({
                     }
             
                     console.log(user)
-                    return {
-                        id: user._id,
-                        name: user.username,
-                        email: user.email,
-                        role: user.role
-                    };
+                    return Promise.resolve({
+                        "id": user._id,
+                        "name": user.username,
+                        "email": user.email,
+                        "role": user.role
+                    })
                     
             }
         })
     ],
     callbacks: {
-        /*async session({ session, user }) {
+        async jwt({ token, user }) {
             
-            session.user.role = user.role;
+            user && (token.user=user);
 
+
+            return token;
+        },
+        async session({ session, token }) {
+            console.log(session.user)
+            session.user= token.user;
+            console.log(session.user)
             return session;
-        },*/
+        },
         async signIn({user}) {
             try {
               
