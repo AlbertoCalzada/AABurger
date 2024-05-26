@@ -11,6 +11,7 @@ const ReservationsManager = () => {
         contactInfo: ''
     });
     const [editingId, setEditingId] = useState(null);
+    const [message, setMessage] = useState(null);
 
     useEffect(() => {
         fetchReservas();
@@ -33,9 +34,11 @@ const ReservationsManager = () => {
             if (confirmed) {
                 await deleteReservationAPI(id);
                 fetchReservas(); // Refresh the list
+                setMessage("Reserva eliminada correctamente.");
             }
         } catch (error) {
             console.error('Error deleting reserva:', error);
+            setMessage("Error al eliminar la reserva.");
         }
     };
 
@@ -48,21 +51,26 @@ const ReservationsManager = () => {
         try {
             if (editingId) {
                 await updateReservationAPI(editingId, formData);
+                setMessage("Reserva actualizada correctamente.");
             } else {
                 await handleReservationAPI(formData);
+
             }
             fetchReservas();
             setFormData({ name: '', date: '', time: '', peopleCount: 1, phone: '' });
             setEditingId(null);
         } catch (error) {
             console.error('Error handling reserva:', error);
+            setMessage("Error al procesar la reserva.");
         }
     };
 
     const handleEdit = (reserva) => {
+
+        const formattedDate = new Date(reserva.date).toISOString().split('T')[0];
         setFormData({
             name: reserva.name,
-            date: reserva.date,
+            date: formattedDate,
             time: reserva.time,
             peopleCount: reserva.peopleCount,
             phone: reserva.phone
@@ -78,6 +86,11 @@ const ReservationsManager = () => {
     return (
         <div className="container mx-auto p-4">
             <h2 className="text-2xl font-bold mb-4">Reservas</h2>
+            {message && (
+                <div className={`text-white p-3 rounded ${message.startsWith("Error") ? 'bg-red-500' : 'bg-green-500'}`}>
+                    {message}
+                </div>
+            )}
             <ul className="mb-4">
                 {reservas.map(reserva => (
                     <li key={reserva._id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
