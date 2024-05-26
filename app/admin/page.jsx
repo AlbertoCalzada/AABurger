@@ -34,9 +34,9 @@ export default function Admin() {
                                 Administrar Reservas
                             </button>
                         </Link>
-                        <Link href="/create-dish">
+                        <Link href="/createDish">
                             <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
-                                Crear un Plato
+                                Gestionar Platos
                             </button>
                         </Link>
                         <br />

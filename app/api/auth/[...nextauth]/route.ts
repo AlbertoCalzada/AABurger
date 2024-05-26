@@ -39,7 +39,7 @@ const handler = NextAuth({
                         throw new Error(JSON.stringify({ statusCode: 401, message: 'Contraseña incorrecta' }));
                     }
             
-                    console.log(user)
+                    //console.log(user)
                     return Promise.resolve({
                         "id": user._id,
                         "name": user.username,
@@ -59,9 +59,9 @@ const handler = NextAuth({
             return token;
         },
         async session({ session, token }) {
-            console.log(session.user)
+            //console.log(session.user)
             session.user= token.user;
-            console.log(session.user)
+            //console.log(session.user)
             return session;
         },
         async signIn({user}) {
