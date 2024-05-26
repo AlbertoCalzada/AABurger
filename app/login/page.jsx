@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { signIn, useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
+import { getUser } from '../api/auth/auth.js';
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
     });
-    const { data: session} = useSession();
+    const { data: session } = useSession();
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
 
@@ -37,38 +37,50 @@ export default function LoginForm() {
         if (password.length < 6) {
             setErrorMessage('La contraseña debe tener al menos 6 caracteres');
             return;
-        
+
         }
         try {
             //await loginRequest(formData);
 
-        
+
             const result = await signIn('credentials', {
                 username,
                 password,
                 redirect: false,
             });
-
+            console.log(result)
             if (result.error) {
-                try {
-                    const error = JSON.parse(result.error);
-                    setErrorMessage(error.message);
-                } catch (e) {
-                    setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
-                }
+
+                const error = JSON.parse(result.error);
+                setErrorMessage(error.message);
+
             } else {
                 setFormData({ username: '', password: '' });
                 setErrorMessage('');
-                router.push('/'); // Redirigir a la página de inicio
+
+                
             }
         } catch (error) {
             setErrorMessage('Error inesperado al iniciar sesión, por favor intenta nuevamente');
         }
     };
 
-  
+
 
     if (session) {
+
+        //fix 
+         const userRole = session?.user?.role;
+         console.log(session); // Imprime el objeto de sesión completo
+
+          if (userRole === 'admin') {
+              router.push('/admin');
+          } else if (userRole === 'user') {
+              router.push('/dashboard');
+          } else {
+              router.push('/'); 
+          }
+
         return (
             <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
                 <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -139,7 +151,7 @@ export default function LoginForm() {
                 </button>
                 <br />
                 <p>
-                     <Link href="/requestResetPassword" className="text-blue-500 underline">¿Olvidaste tu contraseña?</Link>
+                    <Link href="/requestResetPassword" className="text-blue-500 underline">¿Olvidaste tu contraseña?</Link>
                 </p>
                 <p>
                     ¿No tienes cuenta? <Link href="/register" className="text-blue-500 underline">Regístrate</Link>
