@@ -2,6 +2,8 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Link from 'next/link';
+import ReservationsManager from '../../components/reservationsManager';
 
 export default function Admin() {
     const { data: session, status } = useSession();
@@ -19,7 +21,19 @@ export default function Admin() {
     return (
         <div>
             {session && session.user.role === 'admin' && (
-                <h1>Pagina del admin</h1>
+                <>
+                <h1>Página del administrador</h1>
+                <div>
+                    <Link href="/reservationsManager">
+                        <button>Ir a Administrar Reservas</button>
+                    </Link>
+                    <br />
+                    <Link href="/create-dish">
+                        <button>Crear un Plato</button>
+                    </Link>
+                    {/* Agrega más botones aquí para otras secciones */}
+                </div>
+            </>
             )}
         </div>
     );
