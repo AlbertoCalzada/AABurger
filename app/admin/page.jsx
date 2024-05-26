@@ -3,38 +3,48 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import ReservationsManager from '../../components/reservationsManager';
+
 
 export default function Admin() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
     useEffect(() => {
-        
-        if (status === 'authenticated' && session?.user?.role !== 'admin') {
-           
+        if (status === 'authenticated') {
+            if (!session || (session.user.role !== 'admin')) {
+                router.push('/');
+            }
+        } else if (status === 'loading') {
+            
+        } else {
+            
             router.push('/');
         }
     }, [session, status, router]);
 
     
     return (
-        <div>
+        <div className="container mx-auto p-4">
             {session && session.user.role === 'admin' && (
                 <>
-                <h1>Página del administrador</h1>
-                <div>
-                    <Link href="/reservationsManager">
-                        <button>Ir a Administrar Reservas</button>
-                    </Link>
-                    <br />
-                    <Link href="/create-dish">
-                        <button>Crear un Plato</button>
-                    </Link>
-                    {/* Agrega más botones aquí para otras secciones */}
-                </div>
-            </>
+                    <h1 className="text-2xl font-bold mb-4">Página del administrador</h1>
+                    <div className="mb-4">
+                        <Link href="/reservationsManager">
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 mr-4">
+                                Administrar Reservas
+                            </button>
+                        </Link>
+                        <Link href="/create-dish">
+                            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                                Crear un Plato
+                            </button>
+                        </Link>
+                        <br />
+                    </div>
+                    
+                </>
             )}
         </div>
     );
+
 }
