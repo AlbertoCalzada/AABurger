@@ -47,6 +47,7 @@ export default function ResetPasswordForm() {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Restablecer contraseña</h2>
         {message && <div className="text-red-500 mb-4">{message}</div>}
+        
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="password" className="block text-gray-700">Nueva contraseña:</label>
