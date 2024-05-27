@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { registerRequest } from '../api/auth/auth.js'
 import Link from 'next/link';
 import { signIn, useSession, signOut } from 'next-auth/react';
+import Image from 'next/image'
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -132,10 +133,12 @@ export default function RegisterForm() {
                         onClick={() => signIn('google')}
                         className="w-full bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors mt-4 flex items-center justify-center"
                     >
-                        <img
+                        <Image
                             src="/img/google-icon-logo.svg"
                             alt="Google Logo"
                             className="w-5 h-5 mr-2"
+                            width={20}
+    height={20}
                         />
                         Registrate con Google
                     </button>
