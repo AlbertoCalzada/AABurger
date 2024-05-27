@@ -138,7 +138,7 @@ export default function RegisterForm() {
                             alt="Google Logo"
                             className="w-5 h-5 mr-2"
                             width={20}
-    height={20}
+                            height={20}
                         />
                         Registrate con Google
                     </button>
