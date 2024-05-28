@@ -1,0 +1,36 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "next.config.mjs",
+        "use": "@vercel/next"
+      },
+      {
+        "src": "server/app.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/auth/(.*)",
+        "dest": "/api/auth/$1"
+      },
+      {
+        "src": "/api/password/(.*)",
+        "dest": "/api/password/$1"
+      },
+      {
+        "src": "/api/send",
+        "dest": "/api/send"
+      },
+      {
+        "src": "/api/(.*)",
+        "dest": "/server/app.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/"
+      }
+    ]
+  }
+  
