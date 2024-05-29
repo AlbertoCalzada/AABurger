@@ -75,7 +75,7 @@ export default function RegisterForm() {
     }
     
     return (
-        <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4">
+        <div className="bg-gray-100 min-h-screen flex items-center justify-center pb-4" style={{ backgroundImage: "url('/img/burger_background.jpg')"}}>
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-semibold mb-4">Registro</h2>
                 {errorMessage && (
