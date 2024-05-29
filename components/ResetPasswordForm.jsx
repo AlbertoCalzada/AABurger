@@ -6,6 +6,7 @@ export default function ResetPasswordForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [messageCorrect, setMessageCorrect] = useState('');
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
@@ -31,7 +32,9 @@ export default function ResetPasswordForm() {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage('Contraseña restablecida exitosamente');
+              setMessageCorrect('Contraseña restablecida exitosamente');
+              setPassword('')
+              setConfirmPassword('')
                 //router.push('/login');
             } else {
                 setMessage(data.message || 'Ha ocurrido un error, por favor intente nuevamente.');
@@ -47,7 +50,7 @@ export default function ResetPasswordForm() {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Restablecer contraseña</h2>
         {message && <div className="text-red-500 mb-4">{message}</div>}
-        
+        {messageCorrect && <div className="text-green-500 mb-4">{messageCorrect}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="password" className="block text-gray-700">Nueva contraseña:</label>
