@@ -7,6 +7,8 @@ export default function Contact() {
     email: '',
     message: ''
   });
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -14,12 +16,67 @@ export default function Contact() {
       ...formData,
       [name]: value
     });
+   
+
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ''
+      });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = 'El nombre es obligatorio.';
+    if (!formData.email) {
+      newErrors.email = 'El correo electrónico es obligatorio.';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'El correo electrónico no es válido.';
+    }
+    if (!formData.message) newErrors.message = 'El mensaje es obligatorio.';
+    return newErrors;
+  };
+
+  const handleEmailReservation = async (emailData) => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico de reserva:', error);
+
+      return { error: 'Error al enviar el correo electrónico de reserva.' };
+    }
+  };
+
+   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para enviar los datos del formulario
-    console.log(formData);
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length === 0) {
+      const emailResponse = await handleEmailReservation(formData);
+      console.log(emailResponse)
+      if (emailResponse.error) {
+        setErrors({ general: emailResponse.error });
+      } else {
+        setFormData({
+          name: '',
+          email: '',
+          message: ''
+        });
+        setSuccessMessage('Consulta enviada con éxito, será respondida lo antes posible.');
+        setErrors({});
+      }
+    } else {
+      setErrors(validationErrors);
+      setSuccessMessage('Ha ocurrido un error, intentalo de nuevo');
+    }
   };
 
   return (
@@ -43,8 +100,9 @@ export default function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className={`w-full bg-gray-100 bg-opacity-50 rounded border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out`}
                 />
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
               </div>
             </div>
             <div className="p-2 w-1/2">
@@ -57,8 +115,9 @@ export default function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className={`w-full bg-gray-100 bg-opacity-50 rounded border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out`}
                 />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
             </div>
             <div className="p-2 w-full">
@@ -70,8 +129,9 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                  className={`w-full bg-gray-100 bg-opacity-50 rounded border ${errors.message ? 'border-red-500' : 'border-gray-300'} focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out`}
                 ></textarea>
+                {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
               </div>
             </div>
             <div className="p-2 w-full">
@@ -82,6 +142,11 @@ export default function Contact() {
                 Enviar
               </button>
             </div>
+            {successMessage && (
+              <div className="p-2 w-full">
+                <p className="text-green-700 text-center mt-4">{successMessage}</p>
+              </div>
+            )}
             <div className="p-2 w-full pt-8 mt-8 border-t border-gray-200 text-center">
               <a href="mailto:info@a&aburger.com" className="text-indigo-500">info@a&aburger.com</a>
               <p className="leading-normal my-5">
