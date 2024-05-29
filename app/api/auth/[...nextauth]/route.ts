@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from "next-auth/providers/credentials";
-import User from '../../server/models/user.model';
+import User from '../../../../server/models/user.model';
 import bcrypt from 'bcryptjs';
-import { connectDB } from '../../server/db';
+import { connectDB } from '../../../../server/db';
 import { v4 as uuidv4 } from 'uuid'; // Para generar un UUID único
 
 const handler = NextAuth({

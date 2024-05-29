@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '../../server/db.js';
-import User from '../../server/models/user.model';
-import ResetToken from '../../server/models/resetToken.model.js';
+import { connectDB } from '../../../../server/db';
+import User from '../../../../server/models/user.model';
+import ResetToken from '../../../../server/models/resetToken.model.js';
 import { Resend } from 'resend';
 import crypto from 'crypto';
 
