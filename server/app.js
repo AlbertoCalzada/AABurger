@@ -22,7 +22,7 @@ app.listen(port,()=>{
 })
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'https://restaurant-app-blush-kappa.vercel.app'
 }))
 app.use(morgan('dev'))
 app.use(express.json())
