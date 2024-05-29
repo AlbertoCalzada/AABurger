@@ -3,29 +3,28 @@ import Image from 'next/image';
 
 const MenuSection = ({ title, description, items }) => (
   <div className="container px-5 py-24 mx-auto">
-    <div className="flex flex-col text-center w-full mb-20">
-      <h1 className="text-3xl font-medium title-font mb-4 text-gray-900 tracking-widest">{title}</h1>
-      <p className="lg:w-2/3 mx-auto leading-relaxed text-base">{description}</p>
+    <div className="flex flex-col text-center w-full mb-10">
+      <h1 className="text-4xl font-bold mb-4 text-gray-900 tracking-widest">{title}</h1>
+      <p className="text-lg text-gray-700 mb-8">{description}</p>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {items.map((item) => (
-        <div key={item.id} className="relative overflow-hidden rounded-lg group" style={{ width: '400px', height: '300px' }}>
+        <div key={item.id} className="relative overflow-hidden rounded-lg group" style={{ width: '480px', height: '400px' }}>
           <div className="w-full h-full relative overflow-hidden">
             <Image
-              className="object-cover object-center w-full h-full transition-transform duration-300 transform group-hover:scale-110"
+              className="object-cover object-center w-full h-full transition-transform duration-300 transform group-hover:scale-105"
               src={`/img/menu/${item.image}`}
               alt={item.alt}
               fill
             />
+            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            </div>
           </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <p className="text-white text-lg font-bold">{item.name}</p>
-          </div>
-          <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute bottom-0 left-0 bg-gradient-to-t from-gray-900 to-transparent p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="text-white">
               <p className="text-lg font-medium mb-1">{item.name}</p>
               <p className="text-sm mb-2">{item.description}</p>
-              <p className="text-lg font-bold italic">{item.price} €</p>
+              <p className="text-lg font-bold italic">{item.price.toFixed(2)} €</p>
             </div>
           </div>
         </div>
@@ -33,6 +32,7 @@ const MenuSection = ({ title, description, items }) => (
     </div>
   </div>
 );
+
 
 export default function Menu() { 
   const Entrantes = [
@@ -59,14 +59,6 @@ export default function Menu() {
       name: 'Aros de Cebolla',
       description: 'La perfección hecha aro rebozado, crujientes y dorados.',
       price: 7.90,
-    },
-    {
-      id: 4,
-      image: 'steak_tartar.jpg',
-      alt: 'steak-tartar',
-      name: 'Steak Tartar',
-      description: 'Cuando estas tan orgullo de la carne de tu burger que eres capaz de servirlo en tartar de entrante',
-      price: 10.90,
     },
   ];
   
@@ -136,6 +128,14 @@ export default function Menu() {
       alt: 'tarta-pistacho',
       name: 'Tarta de Pistacho',
       description: 'Tarta de pistacho.',
+      price: 4.90,
+    },
+    {
+      id: 13,
+      image: 'tarta_chocolate.jpg',
+      alt: 'tarta-chocolate',
+      name: 'Tarta de Chocolate',
+      description: 'Tarta de chocolate.',
       price: 4.90,
     },
   ];

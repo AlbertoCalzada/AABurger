@@ -308,9 +308,10 @@ function ReservationForm() {
                         </button>
                     </form>
                 </div>
-                <div className="w-full lg:w-1/2">
-                    <Image src="/images/fotoRestaurante.jpg" alt="Foto del restaurante" width={500} height={300} className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity" />
+                <div className="w-full lg:w-1/2 self-center lg:pl-8">
+                    <Image src="/img/restaurant-interior.jpg" alt="Foto del restaurante" width={500} height={300} className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity" />
                 </div>
+
             </div>
         </div>
     );
