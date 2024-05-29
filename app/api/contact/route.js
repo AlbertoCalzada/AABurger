@@ -1,7 +1,5 @@
-import { Resend } from 'resend';
 import { NextResponse } from 'next/server'
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from 'nodemailer';
 
 
 export async function POST(request) {
@@ -11,26 +9,39 @@ export async function POST(request) {
   
       const { email, name, message } = body;
   
-      const data = await resend.emails.send({
-        from: 'A&A Burguer <noreply@albertosburguer.com>',
-        to: 'albertocalzadaglez97@gmail.com', 
-        subject: 'Consultas A&A Burguer',
-        react: (
-          <div>
-            <p><strong>Nombre:</strong> {name}</p>
-            <p><strong>Correo:</strong> {email}</p>
-            <p><strong>Mensaje:</strong> {message}</p>
-          </div>
-        ),
+
+      // Configuración del transportador SMTP
+      let transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_PORT === '465', 
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
       });
+
+
+      let mailOptions = {
+        from: `"A&A Burguer" <${process.env.SMTP_USER}>`, 
+        to: 'albertosburguer@gmail.com', 
+        subject: 'Consultas A&A Burguer', 
+        html: `
+          <div>
+            <p><strong>Nombre:</strong> ${name}</p>
+            <p><strong>Correo:</strong> ${email}</p>
+            <p><strong>Mensaje:</strong> ${message}</p>
+          </div>
+        `, 
+      };
   
-      if (data.status === 'success') {
-        return NextResponse.json({ message: 'Email Successfully Sent!' });
-      }
-  
-      return NextResponse.json(data);
-    } catch (error) {
-      console.log('error', error);
-      return NextResponse.json({ error: 'Error al enviar el correo electrónico' });
-    }
+      let info = await transporter.sendMail(mailOptions);
+
+    console.log('Message sent: %s', info.messageId);
+
+    return NextResponse.json({ message: 'Email Successfully Sent!' });
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({ error: 'Error al enviar el correo electrónico' });
   }
+}
