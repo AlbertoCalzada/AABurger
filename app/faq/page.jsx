@@ -6,11 +6,11 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 const faqs = [
   {
     question: '¿Cuál es el horario de atención?',
-    answer: 'Estamos abiertos de lunes a viernes de 9:00 a 18:00 y los sábados de 10:00 a 14:00.',
+    answer: 'Estamos abiertos de lunes a domingo de 13 a 16 horas en horario de comida y 20 a 24 horas en turno de cenas.',
   },
   {
     question: '¿Dónde están ubicados?',
-    answer: 'Nuestra tienda principal está ubicada en la Calle Falsa 123, Ciudad Ejemplo.',
+    answer: 'Nuestra tienda principal está ubicada en la Gta. de Bilbao, 4, Chamberí, 28004 Madrid.',
   },
   {
     question: '¿Ofrecen servicio de entrega a domicilio?',
@@ -18,11 +18,11 @@ const faqs = [
   },
   {
     question: '¿Cómo puedo hacer una reserva?',
-    answer: 'Puedes hacer una reserva a través de nuestro sitio web o llamándonos al 555-1234.',
+    answer: 'Puedes hacer una reserva a través de nuestro sitio web o llamándonos al 608 08 07 06.',
   },
   {
-    question: '¿Qué métodos de pago aceptan?',
-    answer: 'Aceptamos tarjetas de crédito, débito, PayPal y pagos en efectivo.',
+    question: '¿Cómo puedo reservar "La Guarida"?',
+    answer: 'Para poder disfrutar de nuestro espacio VIP se tiene que reservar por teléfono, dispondrás durante todo el turno de comida o cena, para un máximo de 10 personas y un coste de reserva de 150€ que de descontarán luego del ticket.',
   },
 ];
 
@@ -40,7 +40,7 @@ const FAQ = () => {
     >
       <div className="container px-5 py-24 mx-auto flex md:flex-row flex-col items-center">
         <div className="lg:pr-12 md:w-full mb-10 md:mb-0">
-          <div className="bg-gray-800 bg-opacity-40 rounded-lg p-8">
+          <div className="bg-gray-600 bg-opacity-40 rounded-lg p-8">
             <h2 className="text-gray-100 text-4xl mb-4 font-bold title-font text-center">
               Preguntas Frecuentes
             </h2>
@@ -54,7 +54,7 @@ const FAQ = () => {
                 className="flex justify-between items-center cursor-pointer"
                 onClick={() => toggleFAQ(index)}
               >
-                <h2 className="text-lg font-medium text-gray-600">{faq.question}</h2>
+                <h2 className="text-lg font-medium text-gray-600 font-bold">{faq.question}</h2>
                 <div>
                   {activeIndex === index ? (
                     <FaChevronUp className="text-gray-600" />
@@ -64,7 +64,7 @@ const FAQ = () => {
                 </div>
               </div>
               {activeIndex === index && (
-                <div className="mt-2 text-gray-100">
+                <div className="mt-2 text-gray-100 font-bold italic">
                   <p>{faq.answer}</p>
                 </div>
               )}
