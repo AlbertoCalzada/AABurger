@@ -191,7 +191,7 @@ function ReservationForm() {
                 };
 
                 const emailResponse = await handleEmailReservation(emailData);
-                //console.log(emailResponse);
+                console.log(emailResponse);
 
                 setSuccessMessage('Reserva realizada con éxito.');
                 clearForm();
@@ -199,7 +199,7 @@ function ReservationForm() {
                 setGeneralError('No se pudo completar la reserva.');
             }
         } catch (error) {
-            console.error('Error al hacer la reserva:', error);
+            console.log('Error al hacer la reserva:', error);
             setGeneralError('Ocurrió un error al procesar la reserva. Por favor, inténtalo de nuevo.');
         }
     };

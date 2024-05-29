@@ -1,8 +1,8 @@
 import EmailTemplate from '../../../components/emailReserves.jsx';
-import { Resend } from 'resend';
 import { NextResponse } from 'next/server'
+import nodemailer from 'nodemailer';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 export async function POST(request) {
   try {
@@ -11,21 +11,33 @@ export async function POST(request) {
 
     const { email, name, time, date, peopleCount } = body;
 
-    const data = await resend.emails.send({
-      from: 'A&A Burguer <onboarding@resend.dev>',
-      to: email,
-      subject: '¡Tu reserva ha sido confirmada!',
-      react: EmailTemplate({ name, time, date, peopleCount }),
-
+    // Configuración del transportador SMTP
+    let transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: process.env.SMTP_PORT === '465', 
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
     });
 
-    if (data.status === 'success') {
-      return NextResponse.json({ message: 'Email Successfully Sent!' })
-    }
+    const emailContent = EmailTemplate({ name, time, date, peopleCount });
 
-    return NextResponse.json(data);
+    let mailOptions = {
+      from: `"A&A Burguer" <${process.env.SMTP_USER}>`, 
+      to: email, 
+      subject: '¡Tu reserva ha sido confirmada!',
+      html: emailContent, 
+    };
+
+    let info = await transporter.sendMail(mailOptions);
+
+    console.log('Message sent: %s', info.messageId);
+
+    return NextResponse.json({ message: 'Email Successfully Sent!' });
   } catch (error) {
-    console.log('error', error)
-
+    console.log('error', error);
+    return NextResponse.json({ error: 'Error al enviar el correo electrónico' });
   }
 }

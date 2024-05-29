@@ -22,7 +22,7 @@ app.listen(port,()=>{
 })
 
 app.use(cors({
-    origin: process.env.DOMAIN_URL ||  'http://localhost:3000'
+    origin: 'http://localhost:3000'
 }))
 app.use(morgan('dev'))
 app.use(express.json())

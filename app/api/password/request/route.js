@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '../../../../server/db';
 import User from '../../../../server/models/user.model';
 import ResetToken from '../../../../server/models/resetToken.model.js';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 export async function POST(request) {
     try {
@@ -34,6 +34,16 @@ export async function POST(request) {
 
         const resetUrl = `${process.env.NEXTAUTH_URL}/resetPassword?token=${token}`;
 
+         // Configurar el transportador SMTP
+         const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_PORT === '465', 
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+            },
+        })
 
         const htmlContent = `
             <p>Hola,</p>
@@ -42,11 +52,12 @@ export async function POST(request) {
             <p>Si no solicitaste esto, ignora este correo.</p>
         `;
 
-        await resend.emails.send({
+        // Enviar el correo electrónico
+        await transporter.sendMail({
             from: 'A&A Burguer <onboarding@resend.dev>',
             to: email,
             subject: 'Restablecimiento de contraseña',
-           html: htmlContent 
+            html: htmlContent 
         });
 
         return NextResponse.json({ message: 'Correo de restablecimiento enviado.' });
