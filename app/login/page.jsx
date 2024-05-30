@@ -77,7 +77,7 @@ export default function LoginForm() {
           if (userRole === 'admin') {
               router.push('/admin');
           } else if (userRole === 'user') {
-              router.push('/dashboard');
+              router.push('/');
           } else {
               router.push('/'); 
           }

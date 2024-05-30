@@ -1,0 +1,15 @@
+{
+    "version":2,
+    "builds": [
+      { "src": "server/app.js", "use": "@vercel/node" },
+      { "src": "package.json", "use": "@vercel/next" }
+    ],
+    "routes": [
+      { "src": "/api/auth/([\\w\\/]+)", "dest": "/app/api/auth/$1.js" },
+      { "src": "/api/password/([\\w\\/]+)", "dest": "/app/api/password/$1.js" },
+      { "src": "/api/send", "dest": "/app/api/send" },
+      { "src": "/api/contact", "dest": "/app/api/contact" },
+      { "src": "/api/(.*)", "dest": "/server/app.js" }
+    ]
+  }
+  
