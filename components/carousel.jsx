@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Carousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,6 +15,7 @@ export default function Carousel() {
         '/img/carrusel/carrousel_4.jpg'
     ];
 
+    const { data: session } = useSession();
     useEffect(() => {
         let intervalId;
         if (autoplay) {
@@ -59,9 +61,11 @@ export default function Carousel() {
                 ))}
             </div>
             <div className="absolute top-4 right-4 flex space-x-4">
+            {!session && (
+            <>
                 <Link href="/register">
                     <button className="px-6 py-3 rounded-full text-lg mt-4 md:mt-0 transition-colors bg-yellow-500 text-white hover:bg-yellow-600">
-                        Registrate
+                        Regístrate
                     </button>
                 </Link>
                 <Link href="/login">
@@ -69,6 +73,8 @@ export default function Carousel() {
                         Inicio de Sesión
                     </button>
                 </Link>
+            </>
+        )}
             </div>
             <div className="absolute top-1/2 -translate-y-1/2 flex justify-center w-full">
                 <Link href="/menu">
