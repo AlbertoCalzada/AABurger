@@ -25,6 +25,11 @@ function ReservationForm() {
         setPhonePrefix(`+${countryCode} `);
     }, [selectedCountry]);
 
+    //fix bug primera hora
+    useEffect(() => {
+        setTime(availableTimes[selectedTurn][0]);
+    }, [selectedTurn]);
+
     const handleCountrySelect = (code) => {
         setSelectedCountry(code);
     };
