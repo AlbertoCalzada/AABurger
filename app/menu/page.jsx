@@ -9,8 +9,8 @@ const MenuSection = ({ title, description, items }) => (
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {items.map((item) => (
-        <div key={item.id} className="relative overflow-hidden rounded-lg group" style={{ width: '480px', height: '400px' }}>
-          <div className="w-full h-full relative overflow-hidden">
+        <div key={item.id} className="relative overflow-hidden rounded-lg group">
+            <div className="w-full h-full relative overflow-hidden" style={{ paddingBottom: '75%' }}>
             <Image
               className="object-cover object-center w-full h-full transition-transform duration-300 transform group-hover:scale-105"
               src={`/img/menu/${item.image}`}

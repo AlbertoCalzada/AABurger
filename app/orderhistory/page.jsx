@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { getOrdersAPI } from '../api/order/order';
-import { getDishesAPI } from '../api/dish/dish'; // Importa la función para obtener todos los platos
-
+import { getDishesAPI } from '../api/dish/dish'; 
 const OrderHistory = () => {
   const { data: session, status } = useSession();
   const [orders, setOrders] = useState([]);
@@ -12,15 +11,20 @@ const OrderHistory = () => {
   const [dishDetails, setDishDetails] = useState({});
 
   useEffect(() => {
-    fetchOrders();
-    fetchDishDetails(); // Obtener detalles de los platos al cargar la página
-  }, []);
+    if (session) {
+      fetchOrders();
+      fetchDishDetails();
+    }
+  }, [session]); // Ejecuta el efecto cada vez que cambia la sesión
 
   const fetchOrders = async () => {
     try {
       const response = await getOrdersAPI();
-      setOrders(response.data); // Actualiza orders con los datos obtenidos
+      // Filtra los pedidos para mostrar solo los del usuario actual
+      const userOrders = response.data.filter(order => order.customer === session.user.id);
+      setOrders(userOrders);
       setLoading(false);
+      setError(''); 
     } catch (error) {
       console.error('Error fetching orders:', error);
       setError('Error al obtener el historial de pedidos. Por favor, inténtalo de nuevo más tarde.');
@@ -30,16 +34,19 @@ const OrderHistory = () => {
 
   const fetchDishDetails = async () => {
     try {
-      const response = await getDishesAPI(); // Obtener todos los platos
-      const detailsMap = {};
-      response.forEach(dish => {
-        detailsMap[dish._id] = dish;
-      });
-      setDishDetails(detailsMap); // Almacena los detalles de los platos en el estado dishDetails
+        const response = await getDishesAPI(); 
+        const detailsMap = {};
+        response.data.forEach(dish => {
+            detailsMap[dish._id] = dish;
+        });
+        setDishDetails(detailsMap); 
+        setLoading(false); 
     } catch (error) {
-      console.error('Error fetching dish details:', error);
+        console.error('Error fetching dish details:', error);
+        setError('Error al obtener los detalles de los platos. Por favor, inténtalo de nuevo más tarde.');
+        setLoading(false); 
     }
-  };
+};
 
   if (status === 'loading') return <div>Cargando...</div>;
   if (!session) return <div>Debes iniciar sesión para ver tu historial de pedidos.</div>;
