@@ -4,51 +4,52 @@ import Image from 'next/image';
 import axios from 'axios';
 
 const MenuSection = ({ title, description, items, handleAddToCart, handleRemoveFromCart, cart }) => (
-  <div className="container px-5 py-24 mx-auto">
-    <div className="flex flex-col text-center w-full mb-10">
-      <h1 className="text-4xl font-bold mb-4 text-gray-900 tracking-widest">{title}</h1>
-      <p className="text-lg text-gray-700 mb-8">{description}</p>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {items.map((item) => (
-        <div key={item.id} className="relative overflow-hidden rounded-lg group" style={{ width: '480px', height: '400px' }}>
-          <div className="w-full h-full relative overflow-hidden">
-            <Image
-              className="object-cover object-center w-full h-full transition-transform duration-300 transform group-hover:scale-105"
-              src={`/img/menu/${item.image}`}
-              alt={item.alt}
-              fill
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+    <div className="container px-5 py-24 mx-auto">
+      <div className="flex flex-col text-center w-full mb-10">
+        <h1 className="text-4xl font-bold mb-4 text-gray-900 tracking-widest">{title}</h1>
+        <p className="text-lg text-gray-700 mb-8">{description}</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {items.map((item) => (
+          <div key={item.id} className="relative overflow-hidden rounded-lg group">
+            <div className="w-full h-full relative overflow-hidden" style={{ paddingBottom: '75%' }}>
+              <Image
+                className="object-cover object-center w-full h-full transition-transform duration-300 transform group-hover:scale-105"
+                src={`/img/menu/${item.image}`}
+                alt={item.alt}
+                fill
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              </div>
             </div>
-          </div>
-          <div className="absolute bottom-0 left-0 bg-gradient-to-t from-gray-900 to-transparent p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="text-white">
-              <p className="text-lg font-medium mb-1">{item.name}</p>
-              <p className="text-sm mb-2">{item.description}</p>
-              <p className="text-lg font-bold italic">{item.price.toFixed(2)} €</p>
-              <div className="flex items-center justify-between mt-2">
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded-lg"
-                  onClick={() => handleRemoveFromCart(item)}
-                >
-                  -
-                </button>
-                <span>{cart[item.id] || 0}</span>
-                <button
-                  className="bg-green-500 text-white px-3 py-1 rounded-lg"
-                  onClick={() => handleAddToCart(item)}
-                >
-                  +
-                </button>
+            <div className="absolute bottom-0 left-0 bg-gradient-to-t from-gray-900 to-transparent p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="text-white">
+                <p className="text-lg font-medium mb-1">{item.name}</p>
+                <p className="text-sm mb-2">{item.description}</p>
+                <p className="text-lg font-bold italic">{item.price.toFixed(2)} €</p>
+                <div className="flex items-center justify-between mt-2">
+                  <button
+                    className="bg-red-500 text-white px-3 py-1 rounded-lg"
+                    onClick={() => handleRemoveFromCart(item)}
+                  >
+                    -
+                  </button>
+                  <span>{cart[item.id] || 0}</span>
+                  <button
+                    className="bg-green-500 text-white px-3 py-1 rounded-lg"
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+  
 
 export default function Menu() {
   const [cart, setCart] = useState({});
@@ -200,7 +201,7 @@ export default function Menu() {
         <div className="fixed top-0 right-0 mr-8 mt-8 bg-white shadow-md py-2 px-4 rounded-lg z-50">
           <h1 className="text-xl font-bold text-gray-900">Pedido</h1>
           <p className="text-lg font-semibold text-gray-700">Total: {getTotal()} €</p>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-2" onClick={handlePayment}>Pagar</button>
+          <button className="bg-yellow-500 text-white hover:bg-yellow-600 px-4 py-2 rounded-lg mt-2" onClick={handlePayment}>Pagar</button>
         </div>
         <MenuSection title="ENTRANTES" description="El inicio perfecto para una experiencia única" items={Entrantes} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} cart={cart} />
         <MenuSection title="BURGERS" description="Donde la magia se hace realidad en cada bocado" items={Burgers} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} cart={cart} />
