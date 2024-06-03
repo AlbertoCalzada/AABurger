@@ -25,6 +25,10 @@ const dishSchema = new mongoose.Schema({
         type: String,
         enum: ['entrante', 'principal', 'postre'],
         required: true
+    },
+    isInMenu:{
+        type:Boolean,
+        default:false,
     }
 });
 
