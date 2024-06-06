@@ -63,21 +63,23 @@ const CreateOrder = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <section className="text-gray-600 body-font relative" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>
+        <div className="container mx-auto px-4 py-8 " >
             <h1 className="text-4xl font-bold mb-4 text-gray-900 text-center">Crear Pedido</h1>
             <div className="mb-8">
+            <label htmlFor="name" className="leading-7 text-sm text-gray-600">Datos de entrega:</label>
                 <input
                     type="text"
-                    className="w-full p-2 mb-2 border border-gray-300 rounded"
-                    placeholder="Nombre del Cliente"
+                    className="w-full p-2 mb-2 bg-gray-100 bg-opacity-50 rounded border"
+                    placeholder="Nombre"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     required
                 />
                 <input
                     type="text"
-                    className="w-full p-2 mb-2 border border-gray-300 rounded"
-                    placeholder="Contacto del Cliente"
+                    className="w-full p-2 mb-2 bg-gray-100 bg-opacity-50 rounded border"
+                    placeholder="Dirección"
                     value={customerContact}
                     onChange={(e) => setCustomerContact(e.target.value)}
                     required
@@ -90,7 +92,7 @@ const CreateOrder = () => {
             </div>
             <div className="text-center">
                 <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                    className="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg mt-2"
                     onClick={handleOrderSubmit}
                     disabled={isSubmitting}
                 >
@@ -98,6 +100,7 @@ const CreateOrder = () => {
                 </button>
             </div>
         </div>
+        </section>
     );
 };
 
