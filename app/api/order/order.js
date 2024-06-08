@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //const API = "http://localhost:8000/api";
 
-const API = process.env.DOMAIN_URL + "/api";
+const API = "https://aa-burger.vercel.app/api";
 
 // Crear 
 export const handleOrderAPI = (formData) => {
