@@ -23,7 +23,7 @@ app.listen(port,()=>{
 })
 
 app.use(cors({
-    origin: process.env.DOMAIN_URL
+    origin: 'https://aa-burger.vercel.app'
 }))
 app.use(morgan('dev'))
 app.use(express.json())
