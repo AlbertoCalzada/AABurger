@@ -95,10 +95,10 @@ export default function ManageOrders() {
                                     <td className="py-2">{order.totalPrice}</td>
                                     <td className="py-2">{order.status}</td>
                                     <td className="py-2">
-                                        <ul>
+                                    <ul>
                                             {dishDetails[order._id] &&
                                                 Object.values(dishDetails[order._id]).map((dish, index) => (
-                                                    <li key={index}>{dish.name} - {dish.price} €</li>
+                                                    <li key={index}>{order.items.find(item => item.dishId === dish._id)?.quantity}x {dish.name} - {dish.price} €</li>
                                                 ))}
                                         </ul>
                                     </td>
