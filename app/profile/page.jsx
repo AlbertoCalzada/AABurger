@@ -1,10 +1,15 @@
 'use client'
-import { useSession } from 'next-auth/react'
 
-export default function Profile() {
+import React from 'react';
+import  OrderHistory from '../orderhistory/page.jsx';
 
-    const { data: session, status } = useSession()
 
-    console.log(session, status)
-    return <h1>Perfil</h1>
-}
+const OrderHistoryPage = () => {
+  return (
+    <div className="flex">
+      <OrderHistory />
+    </div>
+  );
+};
+
+export default OrderHistoryPage;

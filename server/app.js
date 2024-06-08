@@ -9,6 +9,7 @@ import cors from 'cors'
 import taskRoutes from './routes/tasks.routes.js'
 import reservaRoutes from './routes/reserve.routes.js'
 import dishRoutes from './routes/dish.routes.js'
+import orderRoutes from './routes/order.routes.js'
 
 import dotenv from 'dotenv'
 dotenv.config()
@@ -32,3 +33,4 @@ app.use("/api",authRoutes)
 app.use("/api",taskRoutes)
 app.use('/api', reservaRoutes)
 app.use('/api', dishRoutes)
+app.use('/api', orderRoutes)
