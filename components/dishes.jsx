@@ -4,14 +4,14 @@ import { handleDishAPI, getDishesAPI, updateDishAPI, deleteDishAPI } from '../ap
 const DishesManager = () => {
     const [dishes, setDishes] = useState([]);
     const [formData, setFormData] = useState({
-        image: '',
+        image: null,
         name: '',
         description: '',
         price: 0,
         type: ''
     });
     const [editingId, setEditingId] = useState(null);
-    const [showCreateForm, setShowCreateForm] = useState(false); // Estado para mostrar/ocultar el formulario de creación
+    const [showCreateForm, setShowCreateForm] = useState(false); 
     const [message, setMessage] = useState(null);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const DishesManager = () => {
             if (confirmed) {
                 await deleteDishAPI(id);
                 setMessage('Plato eliminado correctamente.');
-                fetchDishes(); // Refresh 
+                fetchDishes(); 
             }
         } catch (error) {
             console.error('Error deleting dish:', error);
@@ -42,8 +42,17 @@ const DishesManager = () => {
     };
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (e.target.type === 'file') {
+            // Obtenemos el nombre del archivo seleccionado
+            const fileName = e.target.files[0].name;
+            // Actualizamos el estado con el nombre del archivo
+            setFormData({ ...formData, [e.target.name]: fileName });
+        } else {
+            // Para otros campos, simplemente actualizamos el estado como antes
+            setFormData({ ...formData, [e.target.name]: e.target.value });
+        }
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,9 +65,9 @@ const DishesManager = () => {
                 setMessage('Plato creado correctamente.');
             }
             fetchDishes();
-            setFormData({ image: '', name: '', description: '', price: 0, type: '' });
+            setFormData({ image: null, name: '', description: '', price: 0, type: '' });
             setEditingId(null);
-            setShowCreateForm(false); // Ocultar el formulario después de enviar
+            setShowCreateForm(false);
         } catch (error) {
             console.error('Error handling dish:', error);
             setMessage('Error al procesar el plato.');
@@ -74,7 +83,7 @@ const DishesManager = () => {
             type: dish.type
         });
         setEditingId(dish._id);
-        setShowCreateForm(true); // Mostrar el formulario al editar
+        setShowCreateForm(true);
     };
 
     return (
@@ -95,9 +104,8 @@ const DishesManager = () => {
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-1" htmlFor="image">Imagen (ruta)</label>
                         <input
-                            type="text"
+                            type="file"
                             name="image"
-                            value={formData.image}
                             onChange={handleChange}
                             className="w-full px-3 py-2 border rounded"
                             placeholder="Imagen"
@@ -156,41 +164,42 @@ const DishesManager = () => {
                         </select>
                     </div>
                     <button
-    type="submit"
-    className="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
->
-    {editingId ? 'Actualizar Plato' : 'Crear Plato'}
-</button>
-</form>
-)}
-<ul className="mb-4">
-    {dishes.map(dish => (
-        <li key={dish._id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
-            <div>
-                <div className="font-medium">Nombre: {dish.name}</div>
-                <div>Descripción: {dish.description}</div>
-                <div>Precio: {dish.price}</div>
-                <div>Tipo: {dish.type}</div>
-            </div>
-            <div>
-                <button
-                    onClick={() => handleEdit(dish)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600 transition duration-300"
-                >
-                    Editar
-                </button>
-                <button
-                    onClick={() => handleDelete(dish._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
-                >
-                    Eliminar
-                </button>
-            </div>
-        </li>
-    ))}
-</ul>
-</div>
-);
+                        type="submit"
+                        className="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+                    >
+                        {editingId ? 'Actualizar Plato' : 'Crear Plato'}
+                    </button>
+                </form>
+            )}
+            <ul className="mb-4">
+                {dishes.map(dish => (
+                    <li key={dish._id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
+                        <div>
+                            <div className="font-medium">Nombre: {dish.name}</div>
+                            <div>Descripción: {dish.description}</div>
+                            <div>Precio: {dish.price}</div>
+                            <div>Tipo: {dish.type}</div>
+                        </div>
+                        <div>
+                            <button
+                                onClick={() => handleEdit(dish)}
+                                className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600 transition duration-300"
+                            >
+                                Editar
+                            </button>
+                            <button
+                                onClick={() => handleDelete(dish._id)}
+                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default DishesManager;
+
