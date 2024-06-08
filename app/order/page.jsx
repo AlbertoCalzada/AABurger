@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import MenuOrder from '../../components/menuOrder';
 import { handleOrderAPI } from '../api/order/order';
+import { useRouter } from 'next/navigation';
+
 
 const CreateOrder = () => {
     const { data: session } = useSession();
+    const router = useRouter();
     const userId = session?.user?.id;
-
+    
     const [orderItems, setOrderItems] = useState([]);
     const [customerName, setCustomerName] = useState('');
     const [customerContact, setCustomerContact] = useState('');
@@ -25,6 +28,8 @@ const CreateOrder = () => {
     }, [orderItems]);
 
     const handleOrderSubmit = async () => {
+   
+        
         if (!customerName.trim() || !customerContact.trim()) {
             setSubmissionError('Por favor, complete todos los campos.');
             return;
@@ -74,6 +79,31 @@ const CreateOrder = () => {
             setIsSubmitting(false);
         }
     };
+
+
+    
+   
+    useEffect(() => {
+        if (!session) {
+            setSubmissionError('Debe iniciar sesión para realizar un pedido.');
+            setTimeout(() => {
+                router.push('/login'); 
+            }, 4000);
+        }
+    }, [session, router]);
+
+    
+    if (!session) {
+        return (
+            <section className="text-gray-600 body-font relative" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>
+                <div className="container mx-auto px-4 py-8 text-center">
+                    <h1 className="text-4xl font-bold mb-4 text-gray-900">Debe iniciar sesión para realizar un pedido.</h1>
+                    <p className="text-lg text-gray-700 mt-20 mb-20">Será redirigido a la página de inicio de sesión en unos segundos...</p>
+                </div>
+            </section>
+        );
+    }
+    
 
     return (
         <section className="text-gray-600 body-font relative" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>

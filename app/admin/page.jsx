@@ -35,13 +35,13 @@ export default function Admin() {
                             </button>
                         </Link>
                         <Link href="/createDish">
-                            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 mr-4">
                                 Gestionar Platos
                             </button>
                         </Link>
                         
                         <Link href="/manageMenu">
-                            <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">
+                            <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300 mr-4">
                                 Gestionar Carta
                             </button>
                         </Link>
