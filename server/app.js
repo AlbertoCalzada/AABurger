@@ -23,7 +23,7 @@ app.listen(port,()=>{
 })
 
 app.use(cors({
-    origin: 'https://restaurant-app-blush-kappa.vercel.app'
+    origin: process.env.DOMAIN_URL
 }))
 app.use(morgan('dev'))
 app.use(express.json())

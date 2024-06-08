@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //const API = "http://localhost:8000/api";
-const API = "https://restaurant-app-blush-kappa.vercel.app/api";
+const API = process.env.DOMAIN_URL + "/api";
 // Crear 
 export const handleDishAPI = (formData) => {
     return axios.post(`${API}/dish`, formData)
