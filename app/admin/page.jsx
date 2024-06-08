@@ -31,7 +31,7 @@ export default function Admin() {
                     <div className="mb-4">
                         <Link href="/reservationsManager">
                             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 mr-4">
-                                Administrar Reservas
+                                Gestionar Reservas
                             </button>
                         </Link>
                         <Link href="/createDish">
@@ -39,7 +39,17 @@ export default function Admin() {
                                 Gestionar Platos
                             </button>
                         </Link>
-                        <br />
+                        
+                        <Link href="/manageMenu">
+                            <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">
+                                Gestionar Carta
+                            </button>
+                        </Link>
+                        <Link href="/manageOrders">
+                            <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300">
+                                Gestionar Pedidos
+                            </button>
+                        </Link>
                     </div>
                     
                 </>
