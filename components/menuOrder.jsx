@@ -1,4 +1,3 @@
-// components/MenuOrder.jsx
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getDishesAPI } from '../app/api/dish/dish';
@@ -21,7 +20,7 @@ const MenuSection = ({ title, description, items, handleAddToCart, handleRemoveF
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"></div>
                     </div>
-                    <div className="absolute bottom-0 left-0 bg-gradient-to-t from-gray-900 to-transparent p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute bottom-0 left-0 bg-gradient-t from-gray-900 to-transparent p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="text-white">
                             <p className="text-lg font-medium mb-1">{item.name}</p>
                             <p className="text-sm mb-2">{item.description}</p>
@@ -49,7 +48,7 @@ const MenuSection = ({ title, description, items, handleAddToCart, handleRemoveF
     </div>
 );
 
-const MenuOrder = ({ orderItems, setOrderItems }) => {
+const MenuOrder = ({ orderItems, setOrderItems, resetCart }) => {
     const [cart, setCart] = useState({});
     const [entrantes, setEntrantes] = useState([]);
     const [burgers, setBurgers] = useState([]);
@@ -79,7 +78,7 @@ const MenuOrder = ({ orderItems, setOrderItems }) => {
             ...prevCart,
             [item._id]: (prevCart[item._id] || 0) + 1,
         }));
-
+    
         setOrderItems(prevOrderItems => {
             const existingItem = prevOrderItems.find(orderItem => orderItem.dishId === item._id);
             if (existingItem) {
@@ -89,7 +88,7 @@ const MenuOrder = ({ orderItems, setOrderItems }) => {
             }
         });
     };
-
+    
     const handleRemoveFromCart = (item) => {
         setCart((prevCart) => {
             const newCart = { ...prevCart };
@@ -100,13 +99,15 @@ const MenuOrder = ({ orderItems, setOrderItems }) => {
             }
             return newCart;
         });
-
+    
         setOrderItems(prevOrderItems => {
             const existingItem = prevOrderItems.find(orderItem => orderItem.dishId === item._id);
-            if (existingItem.quantity > 1) {
+            if (existingItem && existingItem.quantity > 1) {
                 return prevOrderItems.map(orderItem => orderItem.dishId === item._id ? { ...orderItem, quantity: orderItem.quantity - 1 } : orderItem);
-            } else {
+            } else if (existingItem && existingItem.quantity === 1) {
                 return prevOrderItems.filter(orderItem => orderItem.dishId !== item._id);
+            } else {
+                return prevOrderItems;
             }
         });
     };
@@ -121,3 +122,4 @@ const MenuOrder = ({ orderItems, setOrderItems }) => {
 };
 
 export default MenuOrder;
+
