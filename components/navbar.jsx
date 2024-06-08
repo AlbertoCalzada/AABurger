@@ -45,15 +45,22 @@ export default function Navbar() {
           {session && (
             <div className="flex items-center ml-2">
               <span className="mr-2 text-gray-300">Hola, {session.user.name}</span>
+              {session.user.role === 'admin' && ( // Mostrar el botón solo si el usuario es admin
+                <Link href="/admin">
+                  <button className="inline-flex text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded-full text-lg mt-4 md:mt-0 mx-2">
+                    Admin
+                  </button>
+                </Link>
+              )}
               <button
                 onClick={() => signOut()}
                 className="inline-flex items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-red-600 rounded-md text-white text-base mt-4 md:mt-0"
               >
                 Cerrar Sesión
               </button>
-            </div>)}
+            </div>
+          )}
         </div>
-        
       </header>
       <div className="w-full h-5 bg-orange-500"></div>
     </>
