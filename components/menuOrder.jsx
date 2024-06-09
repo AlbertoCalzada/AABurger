@@ -112,6 +112,12 @@ const MenuOrder = ({ orderItems, setOrderItems, resetCart }) => {
         });
     };
 
+    useEffect(() => {
+        if (resetCart) {
+            setCart({});
+        }
+    }, [resetCart]);
+
     return (
         <div>
             <MenuSection title="Entrantes" description="¡Disfruta de nuestros deliciosos entrantes!" items={entrantes} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} cart={cart} />
@@ -122,4 +128,3 @@ const MenuOrder = ({ orderItems, setOrderItems, resetCart }) => {
 };
 
 export default MenuOrder;
-
