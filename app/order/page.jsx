@@ -5,7 +5,6 @@ import MenuOrder from '../../components/menuOrder';
 import { handleOrderAPI } from '../api/order/order';
 import { useRouter } from 'next/navigation';
 
-
 const CreateOrder = () => {
     const { data: session } = useSession();
     const router = useRouter();
@@ -18,6 +17,7 @@ const CreateOrder = () => {
     const [submissionError, setSubmissionError] = useState('');
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderSuccessMessage, setOrderSuccessMessage] = useState('');
+    const [resetCart, setResetCart] = useState(false);
 
     useEffect(() => {
         const calculateTotalPrice = () => {
@@ -28,8 +28,6 @@ const CreateOrder = () => {
     }, [orderItems]);
 
     const handleOrderSubmit = async () => {
-   
-        
         if (!customerName.trim() || !customerContact.trim()) {
             setSubmissionError('Por favor, complete todos los campos.');
             return;
@@ -66,13 +64,11 @@ const CreateOrder = () => {
             await handleOrderAPI(orderData);
             setOrderSuccessMessage('Pedido realizado con éxito.');
             setOrderItems([]);
-            const resetOrderItems = orderItems.map(item => ({ ...item, quantity: 0 }));
-            setOrderItems(resetOrderItems);
             setCustomerName('');
             setCustomerContact('');
             setSubmissionError('');
-
-
+            setTotalPrice(0);
+            setResetCart(true); // Reset the cart
         } catch (error) {
             setSubmissionError('Hubo un error al realizar el pedido. Por favor, inténtelo de nuevo.');
         } finally {
@@ -80,9 +76,6 @@ const CreateOrder = () => {
         }
     };
 
-
-    
-   
     useEffect(() => {
         if (!session) {
             setSubmissionError('Debe iniciar sesión para realizar un pedido.');
@@ -92,7 +85,6 @@ const CreateOrder = () => {
         }
     }, [session, router]);
 
-    
     if (!session) {
         return (
             <section className="text-gray-600 body-font relative" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>
@@ -103,11 +95,10 @@ const CreateOrder = () => {
             </section>
         );
     }
-    
 
     return (
         <section className="text-gray-600 body-font relative" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>
-            <div className="container mx-auto px-4 py-8 " >
+            <div className="container mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-4 text-gray-900 text-center">Crear Pedido</h1>
                 <div className="mb-8">
                     <label htmlFor="name" className="leading-7 text-sm text-gray-600">Datos de entrega:</label>
@@ -128,9 +119,21 @@ const CreateOrder = () => {
                         required
                     />
                 </div>
-                <MenuOrder orderItems={orderItems} setOrderItems={setOrderItems} />
+                <MenuOrder orderItems={orderItems} setOrderItems={setOrderItems} resetCart={resetCart} />
                 {submissionError && <p className="text-red-500 text-center mb-4">{submissionError}</p>}
-                <div className="text-center mb-4">
+                {orderItems.length > 0 && (
+                    <div className="text-center mb-8">
+                        <h2 className="text-xl font-bold mb-2">Resumen del Pedido</h2>
+                        <ul className="list-disc inline-block text-left pl-5">
+                            {orderItems.map((item, index) => (
+                                <li key={index}>
+                                    {item.name} - {item.quantity} x {item.price.toFixed(2)} €
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                  <div className="text-center mb-4">
                     <p className="text-lg font-bold">Precio Total: {totalPrice.toFixed(2)} €</p>
                 </div>
                 <div className="text-center">
@@ -144,7 +147,6 @@ const CreateOrder = () => {
                 </div>
                 <br />
                 {orderSuccessMessage && <p className="text-green-600 text-center mb-4">{orderSuccessMessage}</p>}
-
             </div>
         </section>
     );
