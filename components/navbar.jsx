@@ -52,6 +52,7 @@ export default function Navbar() {
                   </button>
                 </Link>
               )}
+              <Link href='/profile'><span className="mr-2 text-gray-300">Hola, {session.user.name}</span></Link>
               <button
                 onClick={() => signOut()}
                 className="inline-flex items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-red-600 rounded-md text-white text-base mt-4 md:mt-0"

@@ -52,39 +52,40 @@ const OrderHistory = () => {
   if (!session) return <div>Debes iniciar sesión para ver tu historial de pedidos.</div>;
 
   return (
+    <div className="mx-auto p-6 bg-gray-100 min-h-screen" style={{ backgroundImage: "url('/img/burger_background.jpg')" }}>
+  <h1 className="text-4xl font-extrabold mb-6 text-center text-gray-800">Historial de Pedidos de {session.user.name}</h1>
+  {loading ? (
+    <div className="text-center text-lg text-gray-600">Cargando historial de pedidos...</div>
+  ) : (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Historial de Pedidos de {session.user.name}</h1>
-      {loading ? (
-        <div>Cargando historial de pedidos...</div>
+      {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
+      {orders.length === 0 ? (
+        <div className="text-center text-lg text-gray-600">No hay historial de pedidos para mostrar.</div>
       ) : (
-        <div>
-          {error && <div className="text-red-500 mb-4">{error}</div>}
-          {orders.length === 0 ? (
-            <div>No hay historial de pedidos para mostrar.</div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {orders.map((order) => (
-                <div key={order._id} className="bg-white p-4 rounded shadow-md">
-                  <h3 className="text-lg font-bold">ID de Orden: {order._id}</h3>
-                  <p>Fecha del Pedido: {new Date(order.createdAt).toLocaleDateString()}</p>
-                  <p>Precio Total: {order.totalPrice}</p>
-                  <p>Estado: {order.status}</p>
-                  <h4 className="text-lg font-bold mt-4">Platos Pedidos:</h4>
-                  <ul>
-                    {order.items.map((item, index) => (
-                      <li key={index}>
-                        {item.quantity}x {dishDetails[item.dishId]?.name} - {dishDetails[item.dishId]?.price} €
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {orders.map((order) => (
+            <div key={order._id} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 className="text-xl font-bold text-gray-800 mb-2">ID de Orden: {order._id}</h3>
+              <p className="text-gray-600 mb-1"><strong>Fecha del Pedido:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+              <p className="text-gray-600 mb-1"><strong>Precio Total:</strong> {order.totalPrice.toFixed(2)} €</p>
+              <p className="text-gray-600 mb-1"><strong>Estado:</strong> {order.status}</p>
+              <h4 className="text-lg font-bold mt-4 text-gray-800">Platos Pedidos:</h4>
+              <ul className="list-disc list-inside ml-4 mt-2">
+                {order.items.map((item, index) => (
+                  <li key={index} className="text-gray-600">
+                    <span className="font-medium">{item.quantity}x</span> {dishDetails[item.dishId]?.name} - {dishDetails[item.dishId]?.price.toFixed(2)} €
+                  </li>
+                ))}
+              </ul>
             </div>
-          )}
+          ))}
         </div>
       )}
     </div>
+  )}
+</div>
+
   );
-};
+}; 
 
 export default OrderHistory;
