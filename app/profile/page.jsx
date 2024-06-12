@@ -6,7 +6,7 @@ import  OrderHistory from '../orderhistory/page.jsx';
 
 const OrderHistoryPage = () => {
   return (
-    <div className="flex">
+    <div className="">
       <OrderHistory />
     </div>
   );
