@@ -33,7 +33,7 @@ const ReservationsManager = () => {
             const confirmed = window.confirm("¿Estás seguro de que quieres eliminar esta reserva?");
             if (confirmed) {
                 await deleteReservationAPI(id);
-                fetchReservas(); // Refresh the list
+                fetchReservas(); // Refresh 
                 setMessage("Reserva eliminada correctamente.");
             }
         } catch (error) {

@@ -48,7 +48,7 @@ const DishesManager = () => {
             // Actualizamos el estado con el nombre del archivo
             setFormData({ ...formData, [e.target.name]: fileName });
         } else {
-            // Para otros campos, simplemente actualizamos el estado como antes
+          
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     };
