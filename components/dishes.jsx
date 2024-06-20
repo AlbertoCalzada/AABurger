@@ -11,6 +11,7 @@ const DishesManager = () => {
         type: ''
     });
     const [editingId, setEditingId] = useState(null);
+    const [showCreateForm, setShowCreateForm] = useState(false); 
     const [message, setMessage] = useState(null);
 
     useEffect(() => {
@@ -61,6 +62,7 @@ const DishesManager = () => {
             fetchDishes();
             setFormData({ image: null, name: '', description: '', price: 0, type: '' });
             setEditingId(null);
+            setShowCreateForm(false);
         } catch (error) {
             console.error('Error handling dish:', error);
             setMessage('Error al procesar el plato.');
@@ -76,6 +78,7 @@ const DishesManager = () => {
             type: dish.type
         });
         setEditingId(dish._id);
+        setShowCreateForm(false); // Ocultar el formulario de creación cuando se edita un plato
     };
 
     return (
@@ -85,13 +88,14 @@ const DishesManager = () => {
             <button
                 onClick={() => {
                     setEditingId(null);
+                    setShowCreateForm(!showCreateForm);
                     setFormData({ image: null, name: '', description: '', price: 0, type: '' });
                 }}
                 className="bg-green-500 text-white px-3 py-1 rounded mb-2 hover:bg-green-600 transition duration-300"
             >
-                {editingId ? 'Cancelar Crear/Editar Plato' : 'Crear Nuevo Plato'}
+                {showCreateForm ? 'Cancelar Crear Nuevo Plato' : 'Crear Nuevo Plato'}
             </button>
-            {editingId === null && (
+            {showCreateForm && !editingId && (
                 <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md">
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-1" htmlFor="image">Imagen (ruta)</label>
