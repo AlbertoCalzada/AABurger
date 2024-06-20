@@ -43,8 +43,12 @@ const DishesManager = () => {
 
     const handleChange = (e) => {
         if (e.target.type === 'file') {
-            setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+     
+            const fileName = e.target.files[0].name;
+           
+            setFormData({ ...formData, [e.target.name]: fileName });
         } else {
+          
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     };
