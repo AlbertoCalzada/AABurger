@@ -20,9 +20,8 @@ const ReservationsManager = () => {
     const fetchReservas = async () => {
         try {
             const data = await getReservationsAPI();
-
             const sortedReservas = data.data.sort((a, b) => new Date(a.date) - new Date(b.date)); //para ordenar y ver mejor las reservas
-            setReservas(data.data);
+            setReservas(sortedReservas);
         } catch (error) {
             console.error('Error fetching reservas:', error);
         }
@@ -54,7 +53,7 @@ const ReservationsManager = () => {
                 setMessage("Reserva actualizada correctamente.");
             } else {
                 await handleReservationAPI(formData);
-
+                setMessage("Reserva creada correctamente.");
             }
             fetchReservas();
             setFormData({ name: '', date: '', time: '', peopleCount: 1, phone: '' });
@@ -66,7 +65,6 @@ const ReservationsManager = () => {
     };
 
     const handleEdit = (reserva) => {
-
         const formattedDate = new Date(reserva.date).toISOString().split('T')[0];
         setFormData({
             name: reserva.name,
@@ -99,7 +97,7 @@ const ReservationsManager = () => {
                             <div>Fecha: {formatDate(reserva.date)}</div>
                             <div>Hora: {reserva.time}</div>
                             <div>Número de personas: {reserva.peopleCount}</div>
-                            <div>Información de contacto: {reserva.phone} - {reserva.email}</div>
+                            <div>Información de contacto: {reserva.phone}</div>
                         </div>
                         <div>
                             <button
@@ -155,10 +153,10 @@ const ReservationsManager = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700 mb-1" htmlFor="partySize">Número de personas</label>
+                        <label className="block text-gray-700 mb-1" htmlFor="peopleCount">Número de personas</label>
                         <input
                             type="number"
-                            name="partySize"
+                            name="peopleCount"
                             value={formData.peopleCount}
                             onChange={handleChange}
                             min="1"
@@ -167,10 +165,10 @@ const ReservationsManager = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700 mb-1" htmlFor="contactInfo">Información de contacto</label>
+                        <label className="block text-gray-700 mb-1" htmlFor="phone">Información de contacto</label>
                         <input
                             type="text"
-                            name="contactInfo"
+                            name="phone"
                             value={formData.phone}
                             onChange={handleChange}
                             className="w-full px-3 py-2 border rounded"
