@@ -11,7 +11,6 @@ const DishesManager = () => {
         type: ''
     });
     const [editingId, setEditingId] = useState(null);
-    const [showCreateForm, setShowCreateForm] = useState(false); 
     const [message, setMessage] = useState(null);
 
     useEffect(() => {
@@ -43,16 +42,11 @@ const DishesManager = () => {
 
     const handleChange = (e) => {
         if (e.target.type === 'file') {
-            // Obtenemos el nombre del archivo seleccionado
-            const fileName = e.target.files[0].name;
-            // Actualizamos el estado con el nombre del archivo
-            setFormData({ ...formData, [e.target.name]: fileName });
+            setFormData({ ...formData, [e.target.name]: e.target.files[0] });
         } else {
-            // Para otros campos, simplemente actualizamos el estado como antes
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     };
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -67,7 +61,6 @@ const DishesManager = () => {
             fetchDishes();
             setFormData({ image: null, name: '', description: '', price: 0, type: '' });
             setEditingId(null);
-            setShowCreateForm(false);
         } catch (error) {
             console.error('Error handling dish:', error);
             setMessage('Error al procesar el plato.');
@@ -83,7 +76,6 @@ const DishesManager = () => {
             type: dish.type
         });
         setEditingId(dish._id);
-        setShowCreateForm(true);
     };
 
     return (
@@ -93,13 +85,13 @@ const DishesManager = () => {
             <button
                 onClick={() => {
                     setEditingId(null);
-                    setShowCreateForm(!showCreateForm);
+                    setFormData({ image: null, name: '', description: '', price: 0, type: '' });
                 }}
                 className="bg-green-500 text-white px-3 py-1 rounded mb-2 hover:bg-green-600 transition duration-300"
             >
-                {showCreateForm ? 'Cancelar Crear Nuevo Plato' : 'Crear Nuevo Plato'}
+                {editingId ? 'Cancelar Crear/Editar Plato' : 'Crear Nuevo Plato'}
             </button>
-            {showCreateForm && (
+            {editingId === null && (
                 <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md">
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-1" htmlFor="image">Imagen (ruta)</label>
@@ -173,27 +165,90 @@ const DishesManager = () => {
             )}
             <ul className="mb-4">
                 {dishes.map(dish => (
-                    <li key={dish._id} className="flex justify-between items-center p-2 bg-gray-100 rounded mb-2">
-                        <div>
-                            <div className="font-medium">Nombre: {dish.name}</div>
-                            <div>Descripción: {dish.description}</div>
-                            <div>Precio: {dish.price}</div>
-                            <div>Tipo: {dish.type}</div>
+                    <li key={dish._id} className="flex flex-col bg-gray-100 rounded mb-2 p-2">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <div className="font-medium">Nombre: {dish.name}</div>
+                                <div>Descripción: {dish.description}</div>
+                                <div>Precio: {dish.price}</div>
+                                <div>Tipo: {dish.type}</div>
+                            </div>
+                            <div>
+                                <button
+                                    onClick={() => handleEdit(dish)}
+                                    className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600 transition duration-300"
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(dish._id)}
+                                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button
-                                onClick={() => handleEdit(dish)}
-                                className="bg-blue-500 text-white px-3 py-1 rounded mr-2 hover:bg-blue-600 transition duration-300"
-                            >
-                                Editar
-                            </button>
-                            <button
-                                onClick={() => handleDelete(dish._id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300"
-                            >
-                                Eliminar
-                            </button>
-                        </div>
+                        {editingId === dish._id && (
+                            <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md mt-2">
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 mb-1" htmlFor="name">Nombre</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border rounded"
+                                        placeholder="Nombre"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 mb-1" htmlFor="description">Descripción</label>
+                                    <textarea
+                                        name="description"
+                                        value={formData.description}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border rounded"
+                                        placeholder="Descripción"
+                                        required
+                                    ></textarea>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 mb-1" htmlFor="price">Precio</label>
+                                    <input
+                                        type="number"
+                                        name="price"
+                                        value={formData.price}
+                                        onChange={handleChange}
+                                        min="0"
+                                        step="0.01"
+                                        className="w-full px-3 py-2 border rounded"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 mb-1" htmlFor="type">Tipo</label>
+                                    <select
+                                        name="type"
+                                        value={formData.type}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-2 border rounded"
+                                        required
+                                    >
+                                        <option value="">Selecciona un tipo</option>
+                                        <option value="entrante">Entrante</option>
+                                        <option value="principal">Principal</option>
+                                        <option value="postre">Postre</option>
+                                    </select>
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+                                >
+                                    {editingId ? 'Actualizar Plato' : 'Crear Plato'}
+                                </button>
+                            </form>
+                        )}
                     </li>
                 ))}
             </ul>
@@ -202,4 +257,3 @@ const DishesManager = () => {
 };
 
 export default DishesManager;
-
