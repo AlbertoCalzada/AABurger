@@ -7,8 +7,8 @@ const ReservationsManager = () => {
         name: '',
         date: '',
         time: '',
-        partySize: 1,
-        contactInfo: ''
+        peopleCount: 1,
+        phone: ''
     });
     const [editingId, setEditingId] = useState(null);
     const [message, setMessage] = useState(null);
